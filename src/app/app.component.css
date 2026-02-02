@@ -1,0 +1,62 @@
+.soa { padding: 10px; }
+
+.header {
+  display: grid;
+  grid-template-columns: 120px 1fr 200px;
+  align-items: center;
+}
+
+.title { text-align: center; }
+
+.top-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.series { margin: 6px 0; }
+
+.red { color: red; font-weight: bold; }
+
+.body {
+  display: grid;
+  grid-template-columns: 1fr 1fr 320px;
+  gap: 6px;
+}
+
+.panel {
+  background: #dfeecd;
+  padding: 6px;
+  border: 1px solid #8ba978;
+}
+
+.section {
+  background: #9acd32;
+  font-weight: bold;
+  padding: 3px;
+  margin-top: 4px;
+}
+
+.panel input, textarea {
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  gap: 4px;
+}
+
+.total {
+  background: #b6d58a;
+  padding: 6px;
+  text-align: right;
+  font-weight: bold;
+}
+
+.right button {
+  width: 100%;
+  margin-bottom: 4px;
+}

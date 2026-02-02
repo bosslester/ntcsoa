@@ -1,0 +1,80 @@
+<div class="soa-container">
+
+  <!-- Mobile Licensing -->
+  <label>
+    <input type="checkbox" [(ngModel)]="isMobile">
+    is Mobile Licensing
+  </label>
+
+  <!-- SOA Series -->
+  <div class="soa-row">
+    <strong>SOA Series</strong>
+    <input type="text" [(ngModel)]="soaSeries">
+  </div>
+
+  <!-- Blue Box -->
+  <div class="soa-box">
+
+    <div class="column">
+
+      <label>
+        <input type="checkbox" [(ngModel)]="types.new">
+        New
+      </label>
+
+      <label>
+        <input type="checkbox" [(ngModel)]="types.renew">
+        Renew
+      </label>
+
+      <label>
+        <input type="checkbox" [(ngModel)]="types.modification">
+        Modification
+      </label>
+
+      <label>
+        <input type="checkbox" [(ngModel)]="types.co">
+        CO
+      </label>
+
+      <label>
+        <input type="checkbox" [(ngModel)]="types.cv">
+        CV
+      </label>
+
+    </div>
+
+    <div class="column">
+
+      <label>
+        <input type="checkbox" [(ngModel)]="types.roc">
+        ROC
+      </label>
+
+      <label>
+        <input type="checkbox" [(ngModel)]="types.ms">
+        MS
+      </label>
+
+      <label>
+        <input type="checkbox" [(ngModel)]="types.ma">
+        MA
+      </label>
+
+      <label>
+        <input type="checkbox" [(ngModel)]="types.others">
+        OTHERS
+      </label>
+
+      <input
+        type="text"
+        placeholder="Specify..."
+        class="others-input"
+        [disabled]="!types.others"
+      >
+
+    </div>
+
+  </div>
+
+</div>

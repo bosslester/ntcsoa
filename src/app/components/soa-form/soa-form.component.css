@@ -1,0 +1,44 @@
+.soa-container {
+  width: 320px;
+  background: #e8f1d9;
+  padding: 12px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.soa-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.soa-row input {
+  width: 150px;
+  padding: 3px;
+}
+
+.soa-box {
+  background: #87b6e6;
+  padding: 10px;
+  border-radius: 4px;
+  display: flex;
+  gap: 20px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+label {
+  cursor: pointer;
+}
+
+.others-input {
+  margin-top: 5px;
+  padding: 3px;
+  width: 120px;
+}

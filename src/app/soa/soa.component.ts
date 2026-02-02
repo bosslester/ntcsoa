@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { SoaService } from './services/soa.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { SoaService } from '../services/soa.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-soa',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './soa.component.html',
+  styleUrls: ['./soa.component.css']
 })
-export class AppComponent implements OnInit {
+export class SoaComponent implements OnInit {
   form!: FormGroup;
   loading = false;
 
-  // default load
   private readonly defaultId = 6792;
 
   constructor(private fb: FormBuilder, private soaService: SoaService) {}
@@ -39,13 +38,6 @@ export class AppComponent implements OnInit {
     this.loadSoa(this.defaultId);
   }
 
-  // ✅ helper for input type="date"
-  private toDateInput(val: any): string {
-    if (!val) return '';
-    const s = String(val);
-    return s.length >= 10 ? s.substring(0, 10) : s; // YYYY-MM-DD
-  }
-
   loadSoa(id: number): void {
     this.loading = true;
 
@@ -53,7 +45,7 @@ export class AppComponent implements OnInit {
       next: (db: any) => {
         this.form.patchValue({
           id: db.id ?? db.ID ?? id,
-          date: this.toDateInput(db.dateIssued ?? db.DateIssued ?? ''),
+          date: db.dateIssued ?? db.DateIssued ?? '',
           payor: db.licensee ?? db.LICENSEE ?? '',
           address: db.address ?? db.Address ?? '',
           particulars: db.particulars ?? db.Particulars ?? '',
@@ -90,9 +82,9 @@ export class AppComponent implements OnInit {
 
     const f = this.form.value as any;
 
-    // ✅ HEADER payload (upper fields first)
     const payload = {
-      dateIssued: f.date ? new Date(f.date).toISOString() : null,
+      id: +f.id,
+      dateIssued: f.date || null,
       licensee: f.payor || null,
       address: f.address || null,
       particulars: f.particulars || null,
@@ -109,11 +101,10 @@ export class AppComponent implements OnInit {
 
     this.loading = true;
 
-    // ✅ IMPORTANT: call header endpoint
-    this.soaService.updateHeader(+f.id, payload).subscribe({
+    this.soaService.update(payload.id, payload).subscribe({
       next: () => {
         this.loading = false;
-        alert('SOA Saved (Header)');
+        alert('SOA Saved');
       },
       error: (err: any) => {
         this.loading = false;
@@ -122,7 +113,20 @@ export class AppComponent implements OnInit {
       }
     });
   }
+
+  newRecord(): void {
+    this.form.reset({
+      id: null,
+      date: '',
+      payor: '',
+      address: '',
+      particulars: '',
+      period: '',
+      radioLicense: 0,
+      rocCert: 0,
+      surchargeAmateur: 0,
+      dst: 0,
+      remarks: ''
+    });
+  }
 }
-
-
-

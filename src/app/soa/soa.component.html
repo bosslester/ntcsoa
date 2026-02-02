@@ -1,0 +1,59 @@
+<div class="container" [formGroup]="form">
+
+  <h2>NATIONAL TELECOMMUNICATIONS COMMISSION</h2>
+  <h4>STATEMENT OF ACCOUNT</h4>
+
+  <div class="grid">
+    <label>Date:</label>
+    <input type="date" formControlName="date">
+
+    <label>Name of Payor:</label>
+    <input type="text" formControlName="payor">
+
+    <label>Address:</label>
+    <input type="text" formControlName="address">
+
+    <label>Particulars:</label>
+    <input type="text" formControlName="particulars">
+
+    <label>Period Covered:</label>
+    <input type="text" formControlName="period">
+  </div>
+
+  <h3>FOR AMATEUR AND ROC</h3>
+
+  <table>
+    <tr>
+      <td>Radio Station License</td>
+      <td><input type="number" formControlName="radioLicense"></td>
+    </tr>
+    <tr>
+      <td>Radio Operator's Cert.</td>
+      <td><input type="number" formControlName="rocFee"></td>
+    </tr>
+    <tr>
+      <td>Surcharges</td>
+      <td><input type="number" formControlName="surcharge"></td>
+    </tr>
+    <tr>
+      <td>Documentary Stamp Tax</td>
+      <td><input type="number" formControlName="dst"></td>
+    </tr>
+  </table>
+
+  <div class="total">
+    TOTAL AMOUNT:
+    <strong>{{ total | number:'1.2-2' }}</strong>
+  </div>
+
+  <label>Remarks / Notes</label>
+  <textarea rows="4" formControlName="remarks"></textarea>
+
+  <div class="buttons">
+    <button type="button" (click)="save()">SAVE</button>
+    <button type="reset">NEW RECORD</button>
+    <button type="button" onclick="window.print()">PRINT PREVIEW</button>
+  </div>
+
+</div>
+
