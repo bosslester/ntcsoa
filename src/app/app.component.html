@@ -13,6 +13,72 @@
         <input type="checkbox" formControlName="isMobile"> is Mobile Licensing
       </label>
     </div>
+  <style>
+  /* Wrapper to align content to the left */
+  .left-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .checkbox-section {
+    margin-top: 15px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    max-width: 400px;
+    background: #fafafa;
+  }
+
+  .checkbox-section h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+  }
+
+  .checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .checkbox-item input {
+    margin-right: 6px;
+    cursor: pointer;
+  }
+</style>
+
+<!-- LEFT SIDE CONTAINER -->
+<div class="left-container">
+
+  <!-- License Types Only -->
+  <!-- RIGHT SIDE: License Types -->
+<div class="checkbox-section compact" formArrayName="licenseTypes">
+
+  <h4>License Type</h4>
+
+  <div class="checkbox-group">
+    <input type="checkbox" [formControlName]="0"> New
+    <input type="checkbox" [formControlName]="1"> Renew
+    <input type="checkbox" [formControlName]="2"> CO
+    <input type="checkbox" [formControlName]="3"> CV
+    <input type="checkbox" [formControlName]="4"> MS
+    <input type="checkbox" [formControlName]="5"> MA
+    <input type="checkbox" [formControlName]="6"> Others
+  </div>
+
+</div>
+
+
+</div>
   </div>
 
   <!-- TOP INFO -->
@@ -141,34 +207,92 @@
 
     <!-- RIGHT -->
     <div class="panel right">
-      <button (click)="save()">SAVE</button>
-      <button type="reset">NEW RECORD</button>
-      <button type="button">SOA PRINT PREVIEW</button>
 
-      <div class="remarks">
-        Remarks / Note
-        <textarea formControlName="remarks"></textarea>
-      </div>
+  <!-- ACTION BUTTONS -->
+  <div class="example-button-row">
+    <button (click)="save()">SAVE</button>
+    <button type="reset">NEW RECORD</button>
+    <button type="button">SOA PRINT PREVIEW</button>
+    <button type="button">Assessment Only</button>
+  </div>
 
-      <div class="assessment">
-        <label><input type="checkbox"> For Assessment Only</label>
-        <label><input type="checkbox"> Endorsed for Payment</label>
-        <textarea formControlName="assessmentNote"></textarea>
-      </div>
+  <!-- REMARKS -->
+  <div class="remarks-box">
+    <label>Remarks / Note</label>
+    <textarea formControlName="remarks"></textarea>
+  </div>
 
-      <label>Prepared By</label>
-      <input formControlName="preparedBy">
 
-      <label>Approved By</label>
-      <input formControlName="approvedBy">
+  <!-- ASSESSMENT -->
+  <div class="assessment-box">
 
-      <div class="op">
-        OP Series <input>
-        OR Number <input formControlName="orNo">
-        Date Paid <input formControlName="datePaid">
-      </div>
+    <label class="check-item">
+      <input type="checkbox"> For Assessment Only
+    </label>
+
+    <label class="check-item">
+      <input type="checkbox"> Endorsed for Payment
+    </label>
+
+    <textarea
+      formControlName="assessmentNote"
+      placeholder="Assessment remarks...">
+    </textarea>
+
+  </div>
+
+
+  <!-- SIGNATURE -->
+  <div class="signature-box" [formGroup]="form">
+
+  <div>
+    <label>Prepared By</label>
+
+    <select formControlName="preparedBy">
+      <option value="">-- Select --</option>
+
+      <option *ngFor="let user of users"
+              [value]="user">
+        {{ user }}
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <label>Approved By</label>
+
+    <select formControlName="approvedBy">
+      <option value="">-- Select --</option>
+
+      <option *ngFor="let user of users"
+              [value]="user">
+        {{ user }}
+      </option>
+    </select>
+  </div>
+
+</div>
+
+
+
+  <!-- OP / OR INFO -->
+  <div class="op-box">
+
+    <div>
+      <label>OP Series</label>
+      <input>
+    </div>
+
+    <div>
+      <label>OR Number</label>
+      <input formControlName="orNo">
+    </div>
+
+    <div>
+      <label>Date Paid</label>
+      <input type="date" formControlName="datePaid">
     </div>
 
   </div>
-</form>
 
+</div>

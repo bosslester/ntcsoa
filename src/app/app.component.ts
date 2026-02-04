@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SoaService } from './services/soa.service';
+import { MatDividerModule } from '@angular/material/divider';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MatDividerModule],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -16,6 +18,7 @@ export class AppComponent implements OnInit {
 
   // default load
   private readonly defaultId = 6792;
+  users: string[] = [];
 
   constructor(private fb: FormBuilder, private soaService: SoaService) {}
 
@@ -97,7 +100,6 @@ export class AppComponent implements OnInit {
       address: f.address || null,
       particulars: f.particulars || null,
       periodCovered: f.period || null,
-
       rslRadioStation: +f.radioLicense || 0,
       rocOperatorFee: +f.rocCert || 0,
       rslSurcharge: +f.surchargeAmateur || 0,
@@ -123,6 +125,3 @@ export class AppComponent implements OnInit {
     });
   }
 }
-
-
-

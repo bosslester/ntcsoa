@@ -60,3 +60,66 @@
   width: 100%;
   margin-bottom: 4px;
 }
+
+
+/* COMPACT LICENSE BOX */
+.checkbox-section.compact {
+  max-width: 200px;      /* smaller width */
+  padding: 8px;          /* less padding */
+  font-size: 13px;       /* slightly smaller text */
+}
+
+.checkbox-section.compact h4 {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.checkbox-section.compact .checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns instead of 3 */
+  gap: 4px;
+}
+
+.checkbox-section.compact .checkbox-item {
+  font-size: 13px;
+  gap: 4px;
+}
+
+.checkbox-section.compact .checkbox-item input {
+  width: 14px;  /* smaller checkbox */
+  height: 14px;
+}
+
+/* actions buttons */
+
+.example-label {
+  display: table-cell;
+  font-size: 14px;
+  margin-left: 8px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  display: table-cell;
+  max-width: 600px;
+}
+
+.example-button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+ 
+label {
+  color: rgba(0, 0, 0, 0.949); /* Change to any color you want */
+}
