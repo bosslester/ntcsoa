@@ -1,0 +1,50 @@
+<div class="info" [formGroup]="form">
+  <div class="row">
+    <div class="lbl">DATE:</div>
+    <div class="pcIn"><input type="date" formControlName="periodFrom"></div>
+  </div>
+  <div class="row">
+  <div class="lbl">Name of Payee:</div>
+  <div class="val">
+    <select class="payeeSel" formControlName="payeeName">
+      <option value="">-- Select Payee --</option>
+      <option *ngFor="let p of payees" [value]="p">{{ p }}</option>
+    </select>
+  </div>
+</div>
+
+  <div class="row">
+    <div class="lbl">Address</div>
+    <div class="val"><input type="text" formControlName="address"></div>
+  </div>
+  <div class="row">
+    <div class="lbl">PARTICULARS:</div>
+    <div class="val"><input type="text" formControlName="particulars"></div>
+  </div>
+ <div class="row periodRow">
+  <div class="lbl">PERIOD COVERED:</div>
+
+  <div class="val">
+    <div class="pcGrid3">
+
+      <div class="pcCol">
+        <div class="pcCap">From</div>
+        <input class="pcIn" type="date" formControlName="periodFrom">
+      </div>
+
+      <div class="pcCol">
+        <div class="pcCap">To</div>
+        <input class="pcIn" type="date" formControlName="periodTo">
+      </div>
+
+        <div class="pcCol">
+        <div class="pcCap">Years</div>
+        <input class="pcIn" type="number" min="0" formControlName="periodYears">
+      </div>
+
+        </div>
+        </div>
+    </div>
+
+
+</div>

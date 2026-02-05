@@ -1,0 +1,135 @@
+/* = INFO TOP BOX =*/
+.info{
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.row{
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  border-bottom: 1px solid var(--line);
+}
+.row:last-child{ border-bottom: 0; }
+
+.lbl{
+  background: var(--blue);
+  font-weight: bold;
+  font-size: 11px;
+  padding: 4px 6px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.val.payeeWrap{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+}
+
+.payeeSearch{
+  height: 18px;
+  padding: 0 6px;
+  font-weight: bold;
+  font-size: 11px;
+  border: 1px solid var(--line);
+  box-sizing: border-box;
+}
+
+.payeeSel{
+  width: 100%;
+  height: 18px;
+  padding: 0 26px 0 6px; /* space for arrow */
+  font-weight: bold;
+  font-size: 11px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-sizing: border-box;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* arrow */
+.val.payeeWrap{
+  position: relative;
+}
+.val.payeeWrap::after{
+  content: "▼";
+  position: absolute;
+  right: 10px;
+  bottom: 3px;  /* aligns with select */
+  font-size: 10px;
+  pointer-events: none;
+}
+
+
+
+/* DATE/NAME/ADDRESS/PARTICULARS */
+.val input{
+  width: 100%;
+  height: 18px;
+  padding: 0 6px;
+  font-weight: bold;
+  font-size: 11px;
+  box-sizing: border-box;
+}
+
+/* = PERIOD COVERED (From | To | Years) - your exact classes=*/
+
+.periodRow .val{
+  padding: 2px 4px;
+  box-sizing: border-box;
+}
+
+/* 3 fields in one line: From | To | Years */
+.periodRow .pcGrid3{
+  display: grid;
+  grid-template-columns: 170px 170px 90px; /* From | To | Years */
+  gap: 10px;
+  align-items: end;
+}
+
+/* each column stack */
+.periodRow .pcCol{
+  display: grid;
+  gap: 2px;
+}
+
+/* small caption */
+.periodRow .pcCap{
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* input style (match top info inputs) */
+.periodRow .pcIn{
+  width: 100%;
+  height: 18px;
+  padding: 0 6px;
+
+  font-weight: bold;
+  font-size: 11px;
+
+  border: 1px solid var(--line);
+  outline: 0;
+  background: #fff;
+  box-sizing: border-box;
+
+  appearance: none;
+  -webkit-appearance: none;
+  box-shadow: none;
+}
+
+.periodRow .pcIn[type="date"]{
+  padding-right: 2px;
+}
+
+.periodRow .pcIn[type="number"]{
+  text-align: center;
+}

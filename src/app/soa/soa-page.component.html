@@ -1,0 +1,42 @@
+<div class="canvas" [formGroup]="form">
+  <app-soa-header [form]="form"></app-soa-header>
+
+  <div class="grid">
+    
+    <div class="infoSpan">
+      <app-soa-left-form [form]="form"></app-soa-left-form>
+    </div>
+
+    
+    <div class="rightSpan">
+      <app-soa-right-panel
+        [form]="form"
+        (onSave)="save()"
+        (onNewRecord)="newRecord()"
+        (onPrintSOA)="printSoa()"
+        (onAssessment)="assessmentOnly()"
+        (onPrintOP)="printOp()"
+      ></app-soa-right-panel>
+    </div>
+
+    <div class="feesLeft">
+      <app-soa-fees [form]="form" mode="left"></app-soa-fees>
+
+      <div class="acct">
+        <div class="acctRow">
+          <div class="acctLbl">Accounting</div>
+          <input class="acctIn" type="text" formControlName="accounting" />
+        </div>
+        <div class="acctRow">
+          <div class="acctLbl">AccountingPosition</div>
+          <input class="acctIn wide" type="text" formControlName="accountingPosition" />
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM MID -->
+    <div class="feesMid">
+      <app-soa-fees [form]="form" mode="mid"></app-soa-fees>
+    </div>
+  </div>
+</div>

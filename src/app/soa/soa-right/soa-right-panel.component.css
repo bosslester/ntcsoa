@@ -1,0 +1,154 @@
+.rp{ width: 500px; }  /* ✅ match right column width */
+
+.topRow{
+  display: grid;
+  grid-template-columns: 210px 180px 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.chkBox{
+  background: var(--rightBlue);
+  border: 1px solid var(--line);
+  padding: 6px 8px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.col{ display: grid; gap: 2px; }
+.col label{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+}
+.othersIn{
+  height: 18px;
+  border: 1px solid var(--line);
+  background: #fff;
+  margin-top: 2px;
+}
+
+.btnCol{ display: grid; gap: 6px; }
+.btn{
+  height: 28px;
+  border: 1px solid var(--line);
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn.save{ background: var(--btnGreen); }
+.btn.new{ background: var(--btnGreen); }
+.btn.soa{ background: var(--btnBlue); }
+.btn.assess{ background: var(--btnAssess); color:#fff; }
+
+.remarks{ width: 180px; }
+.rt{
+  font-weight: bold;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 4px;
+}
+.remarks textarea{
+  width: 180px;
+  height: 120px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+/* OP preview */
+.opBar{
+  margin-top: 10px;
+  width: 500px;
+  margin-right: 10px;
+  height: 26px;
+  background: var(--peach);
+  border: 1px solid var(--line);
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+.opBtn{
+  border: 0;
+  background: transparent;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.opBox{
+  width: 500px;         /* ✅ */
+  background: var(--rightBlue);
+  border: 1px solid var(--line);
+  padding: 10px 12px;
+  font-size: 12px;
+}
+.opBox label{
+  display: block;
+  margin-bottom: 6px;
+}
+.note{ margin-top: 2px; }
+.noteIn{
+  width: 100%;
+  height: 20px;
+  margin-top: 4px;
+  background: #f6d9c6;
+  padding: 0 6px;
+}
+.foot{ margin-top: 8px; }
+
+.pa{
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+}
+.paRow{
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.paRow .lbl{ font-weight: bold; }
+.paRow select{
+  height: 22px;
+  padding: 0 6px;
+}
+
+.opSeries{
+  margin-top: 14px;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+}
+.opTitle{
+  color: #d40000;
+  font-weight: bold;
+  font-size: 12px;
+}
+.opSeriesIn{
+  width: 260px;
+  height: 22px;
+  text-align: right;
+  font-weight: bold;
+  padding: 0 6px;
+}
+
+.orBlock{
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+.orRow{
+  width: 300px;
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.orLbl{ font-weight: bold; }
+.orRow input{
+  height: 20px;
+  padding: 0 6px;
+}

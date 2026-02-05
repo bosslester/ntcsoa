@@ -1,0 +1,89 @@
+.hdr{
+  display: grid;
+  grid-template-columns: 220px 1fr 520px;
+  align-items: start;
+}
+
+.idArea{
+  display: grid;
+  grid-template-columns: 30px 110px;
+  gap: 10px;
+  align-items: center;
+  padding-top: 6px;
+}
+
+.idLbl{ font-weight: bold; font-size: 12px; }
+.idIn{
+  height: 20px;
+  text-align: right;
+  padding: 0 6px;
+}
+
+.title{
+  text-align: center;
+  font-weight: bold;
+  line-height: 1.2;
+  padding-top: 2px;
+}
+.t1{ font-size: 13px; }
+.t2{ font-size: 12px; }
+.t3{ font-size: 12px; }
+
+.rightTop{
+  justify-self: end;
+  width: 520px;
+  display: grid;
+  gap: 6px;
+}
+
+.mobile{
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.seriesLine{
+  display: grid;
+  grid-template-columns: 52px 1fr 140px;
+  gap: 10px;
+  align-items: center;
+  justify-self: end;
+  width: 520px;
+}
+
+.seriesRed{
+  color: #d40000;
+  font-weight: bold;
+  font-size: 12px;
+}
+.seriesNote{ font-size: 12px; }
+
+.seriesNum{
+  height: 22px;
+  text-align: center;
+  font-weight: bold;
+  padding: 0 6px;
+}
+
+.soaSeriesRow{
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 10px;
+  align-items: center;
+  justify-self: end;
+  width: 520px;
+}
+
+.soaSeriesLbl{
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.soaSeriesIn{
+  height: 20px;
+  text-align: right;
+  font-weight: bold;
+  padding: 0 6px;
+}

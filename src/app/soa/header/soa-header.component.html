@@ -1,0 +1,30 @@
+<div class="hdr" [formGroup]="form">
+  <div class="idArea">
+    <div class="idLbl">ID</div>
+    <input class="idIn" type="text" formControlName="id" />
+  </div>
+
+  <div class="title">
+    <div class="t1">NATIONAL TELECOMMUNICATIONS COMMISSION</div>
+    <div class="t2">Regional Office No. 5</div>
+    <div class="t3">STATEMENT OF ACCOUNT</div>
+  </div>
+
+  <div class="rightTop">
+    <label class="mobile">
+      <input type="checkbox" formControlName="isMobileLicensing" />
+      <span>is Mobile Licensing</span>
+    </label>
+
+    <div class="seriesLine">
+      <span class="seriesRed">Series</span>
+      <span class="seriesNote">Pwede iedit kapag conflict sa series.</span>
+      <input class="seriesNum" type="text" formControlName="seriesNumber" />
+    </div>
+
+    <div class="soaSeriesRow">
+      <div class="soaSeriesLbl">SOA Series</div>
+      <input class="soaSeriesIn" type="text" formControlName="soaSeries" />
+    </div>
+  </div>
+</div>

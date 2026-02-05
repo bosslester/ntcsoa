@@ -1,0 +1,84 @@
+<div class="rp" [formGroup]="form">
+  <div class="topRow">
+    <div class="chkBox">
+      <div class="col">
+        <label><input type="checkbox" formControlName="txnNew"> New</label>
+        <label><input type="checkbox" formControlName="txnRenew"> Renew</label>
+        <label><input type="checkbox" formControlName="txnModification"> Modification</label>
+        <label><input type="checkbox" formControlName="txnCO"> CO</label>
+        <label><input type="checkbox" formControlName="txnCV"> CV</label>
+      </div>
+
+      <div class="col">
+        <label><input type="checkbox" formControlName="catROC"> ROC</label>
+        <label><input type="checkbox" formControlName="catMS"> MS</label>
+        <label><input type="checkbox" formControlName="catMA"> MA</label>
+        <label><input type="checkbox" formControlName="catOTHERS"> OTHERS</label>
+        <div class="othersIn"></div>
+      </div>
+    </div>
+
+    <div class="btnCol">
+      <button class="btn save" type="button" (click)="onSave.emit()">SAVE</button>
+      <button class="btn new" type="button" (click)="onNewRecord.emit()">NEW RECORD</button>
+      <button class="btn soa" type="button" (click)="onPrintSOA.emit()">(SOA) Print Preview</button>
+      <button class="btn assess" type="button" (click)="onAssessment.emit()">Assessment Only</button>
+    </div>
+
+    <div class="remarks">
+      <div class="rt">Remarks / Note</div>
+      <textarea formControlName="remarks"></textarea>
+    </div>
+  </div>
+
+  <div class="opBar">
+    <button class="opBtn" type="button" (click)="onPrintOP.emit()">(OP) &nbsp;Print Preview</button>
+  </div>
+
+  <div class="opBox">
+    <label><input type="checkbox" formControlName="opAssessmentOnly"> <b>For Assessment Only:</b></label>
+    <label><input type="checkbox" formControlName="opEndorsedForPayment"> <b>Endorsed for Payment</b></label>
+    <div class="note"><b>Note:</b> To be paid on or before</div>
+    <input class="noteIn" type="text" formControlName="opNotePayOnOrBefore" />
+    <div class="foot"><b>otherwise subject to reassessment.</b></div>
+  </div>
+
+  <div class="pa">
+    <div class="paRow">
+      <div class="lbl">Prepared By:</div>
+      <select formControlName="preparedBy">
+        <option></option>
+      </select>
+    </div>
+    <div class="paRow">
+      <div class="lbl">Approved By:</div>
+      <select formControlName="approvedBy">
+        <option></option>
+      </select>
+    </div>
+  </div>
+
+
+
+
+  <div class="opSeries">
+    <div class="opTitle">OP Series (For accountant only)</div>
+    <input class="opSeriesIn" type="text" formControlName="opSeries" />
+  </div>
+
+
+
+  <div class="orBlock">
+    <div class="orRow">
+      <div class="orLbl">OR NUMBER</div>
+      <input type="text" formControlName="orNumber" />
+    </div>
+    <div class="orRow">
+      <div class="orLbl">Date Paid:</div>
+      <input type="text" formControlName="datePaid" />
+    </div>
+  </div>
+</div>
+
+
+

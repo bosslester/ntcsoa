@@ -1,6 +1,38 @@
-body {
-  margin: 0;
-  background: #e7efd9;
-  font-family: Arial, Helvetica, sans-serif;
+:root{
+  --bg: #dfe8d2;
+  --line: #a9a7b2;
+  --blue: #86b7e6;
+  --green: #a9c94c;
+  --peach: #f1c7a6;
+  --rightBlue: #7fa7d6;
+  --btnGreen: #9dbf61;
+  --btnBlue: #b9d5e8;
+  --btnAssess: #2ebd5b;
 }
 
+html, body{
+  height:100%;
+  margin:0;
+  background: var(--bg);
+  font-family: Arial, Helvetica, sans-serif;
+  color:#000;
+}
+*, *::before, *::after{ box-sizing:border-box; }
+
+input, textarea, select, button{
+  font-family: inherit;
+  font-size: 12px;
+}
+
+input[type="text"], textarea, select{
+  border: 1px solid var(--line);
+  background: #fff;
+  outline: none;
+}
+
+textarea{ resize:none; }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

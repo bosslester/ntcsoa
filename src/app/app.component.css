@@ -123,3 +123,46 @@
 label {
   color: rgba(0, 0, 0, 0.949); /* Change to any color you want */
 }
+ 
+
+
+/* license type css */
+ .left-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .checkbox-section {
+    margin-top: 15px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    max-width: 400px;
+    background: #fafafa;
+  }
+
+  .checkbox-section h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #333;
+    text-align: center;
+  }
+
+  .checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .checkbox-item input {
+    margin-right: 6px;
+    cursor: pointer;
+  }

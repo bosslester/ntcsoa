@@ -1,8 +1,7 @@
 import { Routes } from '@angular/router';
-import { SoaFormComponent } from './components/soa-form/soa-form.component';
+import { SoaPageComponent } from './soa/soa-page.component';
 
 export const routes: Routes = [
-  { path: '', component: SoaFormComponent },
+  { path: '', component: SoaPageComponent },
   { path: '**', redirectTo: '' }
 ];
-

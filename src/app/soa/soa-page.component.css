@@ -1,0 +1,48 @@
+.canvas{
+  width: 1590px;          /* ✅ maximize width */
+  margin: 0 auto;
+  padding: 6px 10px 14px 10px;
+  background: var(--bg);
+}
+
+.grid{
+  margin-top: 6px;
+  display: grid;
+
+  /* ✅ wider left/mid like the reference maximized */
+  grid-template-columns: 420px 460px 500px;
+
+  grid-template-rows: auto auto;
+  gap: 14px;
+  align-items: start;
+}
+
+.infoSpan{ grid-column: 1 / 3; grid-row: 1; }
+.rightSpan{ grid-column: 3; grid-row: 1 / 3; }
+.feesLeft{ grid-column: 1; grid-row: 2; }
+.feesMid{ grid-column: 2; grid-row: 2; }
+
+.acct{
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.acctRow{
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.acctLbl{
+  color: #777;
+  font-size: 12px;
+}
+
+.acctIn{
+  height: 20px;
+  padding: 0 6px;
+}
+
+.acctIn.wide{ width: 100%; }
