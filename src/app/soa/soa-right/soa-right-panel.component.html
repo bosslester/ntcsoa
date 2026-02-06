@@ -19,10 +19,10 @@
     </div>
 
     <div class="btnCol">
-      <button class="btn save" type="button" (click)="onSave.emit()">SAVE</button>
-      <button class="btn new" type="button" (click)="onNewRecord.emit()">NEW RECORD</button>
-      <button class="btn soa" type="button" (click)="onPrintSOA.emit()">(SOA) Print Preview</button>
-      <button class="btn assess" type="button" (click)="onAssessment.emit()">Assessment Only</button>
+      <button class="btn save" type="button" (click)="onSave.emit()">💾SAVE</button>
+      <button class="btn new" type="button" (click)="onNewRecord.emit()">🧾NEW RECORD</button>
+      <button class="btn soa" type="button" (click)="onPrintSOA.emit()">🖨️(SOA) &nbsp;Print Preview</button>
+      <button class="btn assess" type="button" (click)="onAssessment.emit()">🧪Assessment Only</button>
     </div>
 
     <div class="remarks">
@@ -32,7 +32,7 @@
   </div>
 
   <div class="opBar">
-    <button class="opBtn" type="button" (click)="onPrintOP.emit()">(OP) &nbsp;Print Preview</button>
+    <button class="opBtn" type="button" (click)="onPrintOP.emit()">🖨️(OP) &nbsp;Print Preview</button>
   </div>
 
   <div class="opBox">
@@ -47,38 +47,31 @@
     <div class="paRow">
       <div class="lbl">Prepared By:</div>
       <select formControlName="preparedBy">
-        <option></option>
+        <option>Engr. Francis T. M. Alfanta</option>
       </select>
     </div>
     <div class="paRow">
       <div class="lbl">Approved By:</div>
       <select formControlName="approvedBy">
-        <option></option>
+        <option>Engr. William Ramon Luber</option>
       </select>
     </div>
   </div>
-
-
-
 
   <div class="opSeries">
     <div class="opTitle">OP Series (For accountant only)</div>
     <input class="opSeriesIn" type="text" formControlName="opSeries" />
   </div>
 
-
-
   <div class="orBlock">
     <div class="orRow">
       <div class="orLbl">OR NUMBER</div>
       <input type="text" formControlName="orNumber" />
     </div>
-    <div class="orRow">
-      <div class="orLbl">Date Paid:</div>
-      <input type="text" formControlName="datePaid" />
-    </div>
-  </div>
+   <div class="orRow">
+  <div class="orLbl">Date Paid:</div>
+  <input type="date" formControlName="datePaid" />
 </div>
 
-
-
+  </div>
+</div>

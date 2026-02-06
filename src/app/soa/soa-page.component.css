@@ -1,5 +1,5 @@
 .canvas{
-  width: 1590px;          /* ✅ maximize width */
+  width: 1500px;          /* ✅ maximize width */
   margin: 0 auto;
   padding: 6px 10px 14px 10px;
   background: var(--bg);

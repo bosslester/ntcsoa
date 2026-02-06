@@ -1,154 +1,279 @@
-.rp{ width: 500px; }  /* ✅ match right column width */
+/* =========================
+   RP = MAIN GRID
+   ========================= */
+.rp{
+  width: 100%;
+  box-sizing: border-box;
 
-.topRow{
+  /* ✅ MAIN GRID:
+     col1 = chkBox area (290)
+     col2 = buttons area (180)
+  */
   display: grid;
-  grid-template-columns: 210px 180px 1fr;
-  gap: 10px;
-  align-items: start;
+  grid-template-columns: 290px 180px;
+  column-gap: 50px;
+  row-gap: 10px;
+
+  /* ✅ your global left offset */
+  padding-left: 50px;
 }
 
+/* ✅ Make children of .topRow become direct children of .rp (NO HTML CHANGE) */
+.topRow{
+  display: contents;
+}
+
+/* =========================
+   CHECKBOX CONTAINER
+   ========================= */
 .chkBox{
+  grid-column: 1;
+  grid-row: 1;
+
   background: var(--rightBlue);
   border: 1px solid var(--line);
-  padding: 6px 8px;
+  padding: 12px 9px;
   display: grid;
+  border-radius: 3%;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  font-size: 12px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 .col{ display: grid; gap: 2px; }
+
 .col label{
   display: inline-flex;
   align-items: center;
   gap: 6px;
   font-weight: bold;
 }
+
 .othersIn{
   height: 18px;
   border: 1px solid var(--line);
   background: #fff;
   margin-top: 2px;
+  padding: 0 6px;
+  box-sizing: border-box;
 }
 
-.btnCol{ display: grid; gap: 6px; }
+/* =========================
+   BUTTONS
+   ========================= */
+.btnCol{
+  grid-column: 2;
+  grid-row: 1;
+
+  display: grid;
+  gap: 6px;
+}
+
 .btn{
   height: 28px;
+  border-radius: 5%;
   border: 1px solid var(--line);
   font-weight: bold;
   cursor: pointer;
+  box-sizing: border-box;
 }
+
 .btn.save{ background: var(--btnGreen); }
 .btn.new{ background: var(--btnGreen); }
 .btn.soa{ background: var(--btnBlue); }
 .btn.assess{ background: var(--btnAssess); color:#fff; }
 
-.remarks{ width: 180px; }
-.rt{
-  font-weight: bold;
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 4px;
-}
-.remarks textarea{
-  width: 180px;
-  height: 120px;
-  border: 1px solid var(--line);
-  background: #fff;
-}
-
-/* OP preview */
+/* =========================
+   OP PREVIEW BAR
+   ========================= */
 .opBar{
-  margin-top: 10px;
-  width: 500px;
-  margin-right: 10px;
+  grid-column: 1 / -1;
+  grid-row: 2;
+
+  width: 520px;
   height: 26px;
   background: var(--peach);
   border: 1px solid var(--line);
   display: grid;
   align-items: center;
   justify-items: center;
+  box-sizing: border-box;
 }
+
 .opBtn{
   border: 0;
+  font-size: 14px;
   background: transparent;
   font-weight: bold;
   cursor: pointer;
 }
 
+/* =========================
+   OP BOX
+   ========================= */
 .opBox{
-  width: 500px;         /* ✅ */
+  grid-column: 1 / -1;
+  grid-row: 3;
+
+  width: 520px;
   background: var(--rightBlue);
   border: 1px solid var(--line);
   padding: 10px 12px;
-  font-size: 12px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
+
 .opBox label{
   display: block;
   margin-bottom: 6px;
 }
+
 .note{ margin-top: 2px; }
+
 .noteIn{
   width: 100%;
   height: 20px;
   margin-top: 4px;
   background: #f6d9c6;
   padding: 0 6px;
+  border: 1px solid var(--line);
+  box-sizing: border-box;
 }
+
 .foot{ margin-top: 8px; }
 
+/* =========================
+   PA
+   ========================= */
 .pa{
-  margin-top: 10px;
+  grid-column: 1 / -1;
+  grid-row: 4;
+
+  width: 520px;
   display: grid;
   gap: 6px;
-  font-size: 12px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
+
 .paRow{
   display: grid;
   grid-template-columns: 90px 1fr;
   gap: 8px;
   align-items: center;
 }
+
 .paRow .lbl{ font-weight: bold; }
+
 .paRow select{
   height: 22px;
   padding: 0 6px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-sizing: border-box;
 }
 
-.opSeries{
-  margin-top: 14px;
-  display: grid;
-  justify-items: center;
-  gap: 6px;
+/* =========================
+   ✅ ROW 5: REMARKS (LEFT) + OP SERIES (RIGHT) SAME ROW
+   ========================= */
+
+/* LEFT: Remarks */
+.remarks{
+  grid-column: 1;   /* ✅ left column */
+  grid-row: 5;      /* ✅ same row as opSeries */
+
+  width: 150px;
+  justify-self: start;
 }
+
+.rt{
+  font-weight: bold;
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 4px;
+
+  /* optional: align label to right */
+  text-align: right;
+}
+
+.remarks textarea{
+  width: 100%;
+  height: 120px;
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 6px;
+  box-sizing: border-box;
+  resize: none;
+}
+
+/* RIGHT: OP SERIES beside remarks */
+.opSeries{
+  grid-column: 2;   /* ✅ RIGHT COLUMN (THIS FIXES IT) */
+  grid-row: 5;
+  width: auto;        /* ✅ no 500px here */
+  justify-self: end;  /* ✅ stick to the far right */
+
+  display: grid;
+  justify-items: auto; /* ✅ label + input align right */
+  gap: 6px;
+
+  margin-top: 0;
+}
+
 .opTitle{
+  margin-top: 30px;
   color: #d40000;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 15px;
+  text-align: right;
 }
+
 .opSeriesIn{
   width: 260px;
-  height: 22px;
+  height: 24px;
+  margin-bottom: 40px;
   text-align: right;
   font-weight: bold;
   padding: 0 6px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-sizing: border-box;
 }
 
+/* ✅ If your right column is too narrow and you want no overflow, use this instead:
+.opSeriesIn{ width: 180px; }
+*/
+
+/* =========================
+   OR BLOCK
+   ========================= */
 .orBlock{
-  margin-top: 10px;
+  grid-column: 2 / 1;
+  grid-row: 5;
+  width: 500px;
+  margin-left: 220px;
+  margin-top: 100px;
   display: grid;
   gap: 8px;
-  justify-items: center;
+  justify-self: auto;
 }
+
 .orRow{
   width: 300px;
+  margin-bottom: px;
   display: grid;
   grid-template-columns: 110px 1fr;
   gap: 10px;
-  align-items: center;
+  align-items: auto;
 }
+
 .orLbl{ font-weight: bold; }
+
 .orRow input{
-  height: 20px;
+  height: 22px;
   padding: 0 6px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-sizing: border-box;
 }

@@ -1,34 +1,56 @@
+/* =========================
+   HEADER (hdr) - FULL CSS
+   Includes ID as display-only (idDisp) instead of input (idIn)
+   ========================= */
+
 .hdr{
   display: grid;
   grid-template-columns: 220px 1fr 520px;
   align-items: start;
 }
 
+/* LEFT: ID AREA */
 .idArea{
-  display: grid;
-  grid-template-columns: 30px 110px;
-  gap: 10px;
+  display: inline-flex;
   align-items: center;
+  gap: 10px;
   padding-top: 6px;
 }
 
-.idLbl{ font-weight: bold; font-size: 12px; }
+.idLbl{
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.idVal{
+  font-weight: bold;
+  font-size: 12px;
+  color: #000;          /* adjust if you want gray */
+  min-width: 40px;
+  text-align: right;
+}
+
+/* OPTIONAL: if you still keep the input sometimes */
 .idIn{
   height: 20px;
   text-align: right;
   padding: 0 6px;
+  box-sizing: border-box;
 }
 
+/* CENTER: TITLE */
 .title{
   text-align: center;
   font-weight: bold;
   line-height: 1.2;
   padding-top: 2px;
 }
+
 .t1{ font-size: 13px; }
 .t2{ font-size: 12px; }
 .t3{ font-size: 12px; }
 
+/* RIGHT: TOP BLOCK */
 .rightTop{
   justify-self: end;
   width: 520px;
@@ -36,6 +58,7 @@
   gap: 6px;
 }
 
+/* mobile checkbox */
 .mobile{
   justify-self: end;
   display: inline-flex;
@@ -44,6 +67,7 @@
   font-size: 12px;
 }
 
+/* Series row */
 .seriesLine{
   display: grid;
   grid-template-columns: 52px 1fr 140px;
@@ -58,15 +82,20 @@
   font-weight: bold;
   font-size: 12px;
 }
-.seriesNote{ font-size: 12px; }
+
+.seriesNote{
+  font-size: 12px;
+}
 
 .seriesNum{
   height: 22px;
   text-align: center;
   font-weight: bold;
   padding: 0 6px;
+  box-sizing: border-box;
 }
 
+/* SOA Series row */
 .soaSeriesRow{
   display: grid;
   grid-template-columns: 90px 1fr;
@@ -86,4 +115,5 @@
   text-align: right;
   font-weight: bold;
   padding: 0 6px;
+  box-sizing: border-box;
 }

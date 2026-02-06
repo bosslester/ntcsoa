@@ -1,4 +1,6 @@
-/* = INFO TOP BOX =*/
+/* =========================
+   INFO TOP BOX
+   ========================= */
 .info{
   width: 100%;
   border: 1px solid var(--line);
@@ -69,17 +71,19 @@
 
 
 
-/* DATE/NAME/ADDRESS/PARTICULARS */
+/* default input style (DATE/NAME/ADDRESS/PARTICULARS) */
 .val input{
   width: 100%;
-  height: 18px;
+  height: 20px;
   padding: 0 6px;
   font-weight: bold;
-  font-size: 11px;
+  font-size: 14px;
   box-sizing: border-box;
 }
 
-/* = PERIOD COVERED (From | To | Years) - your exact classes=*/
+/* =========================
+   PERIOD COVERED (From | To | Years) - your exact classes
+   ========================= */
 
 .periodRow .val{
   padding: 2px 4px;
@@ -126,10 +130,12 @@
   box-shadow: none;
 }
 
+/* date inputs need a bit more right padding so the calendar icon fits */
 .periodRow .pcIn[type="date"]{
   padding-right: 2px;
 }
 
+/* Years a bit centered like forms */
 .periodRow .pcIn[type="number"]{
   text-align: center;
 }

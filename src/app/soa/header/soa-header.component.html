@@ -1,8 +1,9 @@
 <div class="hdr" [formGroup]="form">
   <div class="idArea">
-    <div class="idLbl">ID</div>
-    <input class="idIn" type="text" formControlName="id" />
+  <div class="idLbl">ID:</div>
+  <div class="idDisp">{{ form.get('id')?.value }}</div>
   </div>
+
 
   <div class="title">
     <div class="t1">NATIONAL TELECOMMUNICATIONS COMMISSION</div>

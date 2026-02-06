@@ -1,6 +1,5 @@
 .box{
-  width: 100%;    
-  margin-left: 10px;             /*  stretch to column width */
+  width: 100%;           /* ✅ stretch to column width */
   border: 1px solid var(--line);
   background: #fff;
 }
@@ -18,7 +17,7 @@
 
 .r{
   display: grid;
-  grid-template-columns: 1fr 160px;   /*  wider input/amount column */
+  grid-template-columns: 1fr 160px;   /* ✅ wider input/amount column */
   border-bottom: 1px solid var(--line);
 }
 
