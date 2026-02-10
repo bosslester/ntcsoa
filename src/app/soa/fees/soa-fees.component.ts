@@ -1,17 +1,20 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subject, combineLatest, startWith } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-type RocRow = { roc: number; dst: number };
+type RocRow = {
+  roc: number;
+  dst: number;
+};
 
 @Component({
   selector: 'app-soa-fees',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './soa-fees.component.html',
-  styleUrls: ['./soa-fees.component.css']
+  styleUrls: ['./soa-fees.component.css'],
 })
 export class SoaFeesComponent implements OnInit, OnDestroy {
   @Input() form!: FormGroup;
@@ -19,15 +22,17 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  // ✅ Your table mapping (from screenshot)
+  // =========================
+  // ROC TABLE
+  // =========================
   private readonly ROC_TABLE: Record<string, RocRow> = {
     'RTG 1st': { roc: 180, dst: 30 },
     'RTG 2nd': { roc: 120, dst: 30 },
-    'RTG 3rd': { roc: 60,  dst: 30 },
+    'RTG 3rd': { roc: 60, dst: 30 },
 
     'PHN 1st': { roc: 120, dst: 30 },
     'PHN 2nd': { roc: 100, dst: 30 },
-    'PHN 3rd': { roc: 60,  dst: 30 },
+    'PHN 3rd': { roc: 60, dst: 30 },
 
     'RROC- AIRCRAFT': { roc: 100, dst: 30 },
     'SROP': { roc: 60, dst: 30 },
@@ -35,22 +40,99 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'RROC-RLM': { roc: 60, dst: 30 },
   };
 
+  // =========================
+  // TOTAL AMOUNT FIELDS
+  // =========================
+  private readonly TOTAL_FIELDS: string[] = [
+    // LICENSES
+    'licPermitToPurchase',
+    'licFilingFee',
+    'licPermitToPossess',
+    'licConstructionPermitFee',
+    'licRadioStationLicense',
+    'licInspectionFee',
+    'licSUF',
+    'licFinesPenalties',
+    'licSurcharges',
+
+    // OTHER APPLICATION
+    'appRegistrationFee',
+    'appSupervisionRegulationFee',
+    'appVerificationAuthFee',
+    'appExaminationFee',
+    'appClearanceCertificationFee',
+    'appModificationFee',
+    'appMiscIncome',
+    'appOthers',
+
+    // PERMITS
+    'perPermitFees',
+    'perInspectionFee',
+    'perFilingFee',
+    'perSurcharges',
+
+    // AMATEUR & ROC
+    'amRadioStationLicense',
+    'amRadioOperatorsCert',
+    'amApplicationFee',
+    'amFilingFee',
+    'amSeminarFee',
+    'amSurcharges',
+
+    // DST
+    'dst',
+  ];
+
+  // =========================
+  // INIT
+  // =========================
   ngOnInit(): void {
     if (!this.form) return;
 
-    // ✅ OUTPUT controls (already in your HTML)
+    this.setupRocComputation();
+    this.setupTotalComputation();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  // =====================================================
+  // ROC + DST COMPUTATION (IF–ELSE)
+  // =====================================================
+  private setupRocComputation(): void {
     const certCtrl = this.form.get('amRadioOperatorsCert');
-    const dstCtrl  = this.form.get('dst');
+    const dstCtrl = this.form.get('dst');
 
     if (!certCtrl || !dstCtrl) return;
 
-    // ✅ INPUT controls (MUST exist in your parent form)
-    // We try multiple possible names so you don't need to change HTML.
-    const isNewCtrl = this.pickCtrl(['isNew', 'new', 'chkNew', 'isNEW', 'newApplication']);
-    const classCtrl = this.pickCtrl(['rocClass', 'rocOperator', 'operator', 'rocType', 'classRoc', 'roc']);
-    const yearsCtrl = this.pickCtrl(['rocYears', 'years', 'numberOfYears', 'noOfYears', 'rocYr', 'yr']);
+    const isNewCtrl = this.pickCtrl([
+      'isNew',
+      'new',
+      'chkNew',
+      'isNEW',
+      'newApplication',
+    ]);
 
-    // If any of these are missing, do nothing (keeps your UI stable)
+    const classCtrl = this.pickCtrl([
+      'rocClass',
+      'rocOperator',
+      'operator',
+      'rocType',
+      'classRoc',
+      'roc',
+    ]);
+
+    const yearsCtrl = this.pickCtrl([
+      'rocYears',
+      'years',
+      'numberOfYears',
+      'noOfYears',
+      'rocYr',
+      'yr',
+    ]);
+
     if (!isNewCtrl || !classCtrl || !yearsCtrl) return;
 
     combineLatest([
@@ -60,63 +142,84 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     ])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([isNew, rocClass, years]) => {
-        // Apply only when NEW is checked
         if (!this.toBool(isNew)) {
-          this.safePatch(dstCtrl, null);
-          this.safePatch(certCtrl, null);
-          return;
+          this.safePatch(dstCtrl, 0);
+          this.safePatch(certCtrl, 0);
+        } else if (!rocClass) {
+          this.safePatch(dstCtrl, 0);
+          this.safePatch(certCtrl, 0);
+        } else if (!this.ROC_TABLE[String(rocClass).trim()]) {
+          this.safePatch(dstCtrl, 0);
+          this.safePatch(certCtrl, 0);
+        } else {
+          const row = this.ROC_TABLE[String(rocClass).trim()];
+          const yrs = this.toNumber(years);
+          const safeYears = yrs > 0 ? yrs : 0;
+
+          const dst = row.dst;
+          const total = row.roc * safeYears + dst;
+
+          this.safePatch(dstCtrl, dst);
+          this.safePatch(certCtrl, total);
         }
-
-        const key = String(rocClass ?? '').trim();
-        const row = this.ROC_TABLE[key];
-
-        if (!row) {
-          this.safePatch(dstCtrl, null);
-          this.safePatch(certCtrl, null);
-          return;
-        }
-
-        const y = this.toNumber(years);
-        const safeYears = y > 0 ? y : 0;
-
-        const dst = row.dst; // 30
-        const total = (row.roc * safeYears) + dst;
-
-        this.safePatch(dstCtrl, dst);
-        this.safePatch(certCtrl, total);
       });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  // =====================================================
+  // TOTAL AMOUNT COMPUTATION (ALL FIELDS)
+  // =====================================================
+  private setupTotalComputation(): void {
+    const totalCtrl = this.form.get('totalAmount');
+    if (!totalCtrl) return;
+
+    const feeCtrls = this.TOTAL_FIELDS
+      .map(name => this.form.get(name))
+      .filter((c): c is AbstractControl => !!c);
+
+    combineLatest(
+      feeCtrls.map(ctrl => ctrl.valueChanges.pipe(startWith(ctrl.value)))
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(values => {
+        let total = 0;
+
+        for (const val of values) {
+          const num = Number(val);
+          if (!isNaN(num)) {
+            total += num;
+          }
+        }
+
+        totalCtrl.patchValue(total, { emitEvent: false });
+      });
   }
 
-  // -------------------------
-  // Helpers (no HTML needed)
-  // -------------------------
+  // =====================================================
+  // HELPERS
+  // =====================================================
   private pickCtrl(names: string[]): AbstractControl | null {
-    for (const n of names) {
-      const c = this.form.get(n);
-      if (c) return c;
+    for (const name of names) {
+      const ctrl = this.form.get(name);
+      if (ctrl) return ctrl;
     }
     return null;
   }
 
-  private safePatch(ctrl: AbstractControl, val: any): void {
-    // emitEvent:false prevents loops when patching computed fields
-    ctrl.patchValue(val, { emitEvent: false });
+  private safePatch(ctrl: AbstractControl, value: any): void {
+    ctrl.patchValue(value, { emitEvent: false });
   }
 
-  private toBool(v: any): boolean {
-    return v === true || v === 1 || v === '1' || String(v).toLowerCase() === 'true';
+  private toBool(value: any): boolean {
+    return (
+      value === true ||
+      value === 1 ||
+      value === '1' ||
+      String(value).toLowerCase() === 'true'
+    );
   }
 
-  private toNumber(v: any): number {
-    const n = Number(v);
+  private toNumber(value: any): number {
+    const n = Number(value);
     return Number.isFinite(n) ? n : 0;
   }
 }
-
-
-
