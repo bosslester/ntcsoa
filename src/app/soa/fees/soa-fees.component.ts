@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subject, combineLatest, startWith } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -157,7 +157,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
           const safeYears = yrs > 0 ? yrs : 0;
 
           const dst = row.dst;
-          const total = row.roc * safeYears + dst;
+          const total = row.roc * safeYears + dst; //Radio Operator's Cert = (ROC x Number of Years) + DocStamp
 
           this.safePatch(dstCtrl, dst);
           this.safePatch(certCtrl, total);
@@ -169,8 +169,20 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   // TOTAL AMOUNT COMPUTATION (ALL FIELDS)
   // =====================================================
   private setupTotalComputation(): void {
-    const totalCtrl = this.form.get('totalAmount');
-    if (!totalCtrl) return;
+    let totalCtrl = this.form.get('totalAmount');
+
+    // If parent form doesn't provide a `totalAmount` control, create one
+    if (!totalCtrl) {
+      this.form.addControl('totalAmount', new FormControl(0));
+      totalCtrl = this.form.get('totalAmount')!;
+    }
+
+    // Ensure all expected fee controls exist on the parent form (create missing ones)
+    for (const name of this.TOTAL_FIELDS) {
+      if (!this.form.get(name)) {
+        this.form.addControl(name, new FormControl(0));
+      }
+    }
 
     const feeCtrls = this.TOTAL_FIELDS
       .map(name => this.form.get(name))
@@ -184,13 +196,10 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
         let total = 0;
 
         for (const val of values) {
-          const num = Number(val);
-          if (!isNaN(num)) {
-            total += num;
-          }
+          total += this.toNumber(val);
         }
 
-        totalCtrl.patchValue(total, { emitEvent: false });
+        totalCtrl!.patchValue(total, { emitEvent: false });
       });
   }
 
