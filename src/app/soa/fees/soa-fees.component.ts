@@ -164,7 +164,89 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
       });
   }
 
-  
+  // =====================================================
+  // AMATEUR / RSL / CLUB / SPECIAL FORMULAS
+  // =====================================================
+  private setupAmateurFormulas(): void {
+    const typeCtrl = this.pickCtrl([
+      'amType',
+      'amateurType',
+      'operatorType',
+      'selectedOperator',
+    ]);
+
+    const yearsCtrl = this.pickCtrl([
+      'amYears',
+      'years',
+      'numberOfYears',
+    ]);
+
+    if (!typeCtrl || !yearsCtrl) return;
+
+    combineLatest([
+      typeCtrl.valueChanges.pipe(startWith(typeCtrl.value)),
+      yearsCtrl.valueChanges.pipe(startWith(yearsCtrl.value)),
+    ])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([type, years]) => {
+
+        const yr  = this.toNumber(years);
+        const ff  = this.toNumber(this.form.get('amFilingFee')?.value);
+        const lf  = this.toNumber(this.form.get('amRadioStationLicense')?.value);
+        const sur = this.toNumber(this.form.get('amSurcharges')?.value);
+        const dst = this.toNumber(this.form.get('dst')?.value);
+        const mod = this.toNumber(this.form.get('appModificationFee')?.value);
+        const cpf = this.toNumber(this.form.get('licConstructionPermitFee')?.value);
+        const sp  = this.toNumber(this.form.get('perPermitFees')?.value);
+
+        let result = 0;
+
+        switch (String(type)) {
+
+          case 'AT-RSL-NEW':
+            result = ff + (lf * yr) + dst;
+            break;
+
+          case 'AT-RSL-RENEWAL':
+            result = (lf * yr) + dst + sur;
+            break;
+
+          case 'AT-RSL-MOD':
+            result = ff + mod + dst;
+            break;
+
+          case 'AT-LIFETIME':
+            result = lf + dst;
+            break;
+
+          case 'AT-CLUB-NEW':
+            result = ff + cpf + (lf * yr) + dst;
+            break;
+
+          case 'AT-CLUB-RENEWAL':
+            result = (lf * yr) + dst + sur;
+            break;
+
+          case 'AT-CLUB-MOD':
+            result = ff + cpf + mod + dst;
+            break;
+
+          case 'VANITY':
+            result = (sp * yr) + dst;
+            break;
+
+          case 'SPECIAL-EVENT':
+            result = sp + dst;
+            break;
+        }
+
+        this.safePatch(
+          this.form.get('amRadioOperatorsCert')!,
+          result
+        );
+      });
+  }
+
   // =====================================================
   // TOTAL AMOUNT COMPUTATION
   // =====================================================
