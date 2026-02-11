@@ -1,6 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Subject, combineLatest, startWith } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -44,7 +49,6 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   // TOTAL AMOUNT FIELDS
   // =========================
   private readonly TOTAL_FIELDS: string[] = [
-    // LICENSES
     'licPermitToPurchase',
     'licFilingFee',
     'licPermitToPossess',
@@ -55,7 +59,6 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'licFinesPenalties',
     'licSurcharges',
 
-    // OTHER APPLICATION
     'appRegistrationFee',
     'appSupervisionRegulationFee',
     'appVerificationAuthFee',
@@ -65,13 +68,11 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'appMiscIncome',
     'appOthers',
 
-    // PERMITS
     'perPermitFees',
     'perInspectionFee',
     'perFilingFee',
     'perSurcharges',
 
-    // AMATEUR & ROC
     'amRadioStationLicense',
     'amRadioOperatorsCert',
     'amApplicationFee',
@@ -79,7 +80,6 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'amSeminarFee',
     'amSurcharges',
 
-    // DST
     'dst',
   ];
 
@@ -90,6 +90,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     if (!this.form) return;
 
     this.setupRocComputation();
+    this.setupAmateurFormulas();   // ✅ ADDED
     this.setupTotalComputation();
   }
 
@@ -99,7 +100,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   }
 
   // =====================================================
-  // ROC + DST COMPUTATION (IF–ELSE)
+  // ROC + DST COMPUTATION
   // =====================================================
   private setupRocComputation(): void {
     const certCtrl = this.form.get('amRadioOperatorsCert');
@@ -145,39 +146,36 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
         if (!this.toBool(isNew)) {
           this.safePatch(dstCtrl, 0);
           this.safePatch(certCtrl, 0);
-        } else if (!rocClass) {
-          this.safePatch(dstCtrl, 0);
-          this.safePatch(certCtrl, 0);
-        } else if (!this.ROC_TABLE[String(rocClass).trim()]) {
-          this.safePatch(dstCtrl, 0);
-          this.safePatch(certCtrl, 0);
-        } else {
-          const row = this.ROC_TABLE[String(rocClass).trim()];
-          const yrs = this.toNumber(years);
-          const safeYears = yrs > 0 ? yrs : 0;
-
-          const dst = row.dst;
-          const total = row.roc * safeYears + dst; //Radio Operator's Cert = (ROC x Number of Years) + DocStamp
-
-          this.safePatch(dstCtrl, dst);
-          this.safePatch(certCtrl, total);
+          return;
         }
+
+        const row = this.ROC_TABLE[String(rocClass)?.trim()];
+        if (!row) {
+          this.safePatch(dstCtrl, 0);
+          this.safePatch(certCtrl, 0);
+          return;
+        }
+
+        const safeYears = this.toNumber(years);
+        const total = row.roc * safeYears + row.dst;
+
+        this.safePatch(dstCtrl, row.dst);
+        this.safePatch(certCtrl, total);
       });
   }
 
+  
   // =====================================================
-  // TOTAL AMOUNT COMPUTATION (ALL FIELDS)
+  // TOTAL AMOUNT COMPUTATION
   // =====================================================
   private setupTotalComputation(): void {
     let totalCtrl = this.form.get('totalAmount');
 
-    // If parent form doesn't provide a `totalAmount` control, create one
     if (!totalCtrl) {
       this.form.addControl('totalAmount', new FormControl(0));
       totalCtrl = this.form.get('totalAmount')!;
     }
 
-    // Ensure all expected fee controls exist on the parent form (create missing ones)
     for (const name of this.TOTAL_FIELDS) {
       if (!this.form.get(name)) {
         this.form.addControl(name, new FormControl(0));
@@ -194,11 +192,9 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(values => {
         let total = 0;
-
         for (const val of values) {
           total += this.toNumber(val);
         }
-
         totalCtrl!.patchValue(total, { emitEvent: false });
       });
   }
