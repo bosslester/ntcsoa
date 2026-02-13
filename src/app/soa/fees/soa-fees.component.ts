@@ -1,11 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, } from '@angular/forms';
 import { Subject, combineLatest, startWith } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -34,11 +29,9 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'RTG 1st': { roc: 180, dst: 30 },
     'RTG 2nd': { roc: 120, dst: 30 },
     'RTG 3rd': { roc: 60, dst: 30 },
-
     'PHN 1st': { roc: 120, dst: 30 },
     'PHN 2nd': { roc: 100, dst: 30 },
     'PHN 3rd': { roc: 60, dst: 30 },
-
     'RROC- AIRCRAFT': { roc: 100, dst: 30 },
     'SROP': { roc: 60, dst: 30 },
     'GROC': { roc: 60, dst: 30 },
@@ -83,14 +76,11 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'dst',
   ];
 
-  // =========================
-  // INIT
-  // =========================
   ngOnInit(): void {
     if (!this.form) return;
 
     this.setupRocComputation();
-    this.setupAmateurFormulas();   // ✅ ADDED
+    this.setupAmateurFormulas();
     this.setupTotalComputation();
   }
 
@@ -165,7 +155,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   }
 
   // =====================================================
-  // AMATEUR / RSL / CLUB / SPECIAL FORMULAS
+  // ALL 21 FORMULAS
   // =====================================================
   private setupAmateurFormulas(): void {
     const typeCtrl = this.pickCtrl([
@@ -198,25 +188,43 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
         const mod = this.toNumber(this.form.get('appModificationFee')?.value);
         const cpf = this.toNumber(this.form.get('licConstructionPermitFee')?.value);
         const sp  = this.toNumber(this.form.get('perPermitFees')?.value);
+        const pur = this.toNumber(this.form.get('licPermitToPurchase')?.value);
+        const pos = this.toNumber(this.form.get('licPermitToPossess')?.value);
 
         let result = 0;
 
         switch (String(type)) {
 
-          case 'AT-RSL-NEW':
-            result = ff + (lf * yr) + dst;
+          // ===== A SERIES =====
+          case 'AT-ROC-NEW':
+            result = (lf * yr) + dst;
             break;
 
-          case 'AT-RSL-RENEWAL':
+          case 'AT-ROC-RENEWAL':
             result = (lf * yr) + dst + sur;
             break;
 
-          case 'AT-RSL-MOD':
-            result = ff + mod + dst;
+          case 'AT-ROC-MOD':
+            result = mod + dst;
             break;
 
-          case 'AT-LIFETIME':
-            result = lf + dst;
+          // ===== B SERIES =====
+          case 'AT-RSL-PURPOS':
+            result = pur + pos + dst;
+            break;
+
+          case 'PERMIT-STF':
+            result = sp + dst;
+            break;
+
+          // ===== C SERIES =====
+          case 'AT-LIFETIME-PURPOS':
+            result = pur + pos + dst;
+            break;
+
+          // ===== D SERIES =====
+          case 'AT-CLUB-PURPOS':
+            result = pur + pos + dst;
             break;
 
           case 'AT-CLUB-NEW':
@@ -231,12 +239,23 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
             result = ff + cpf + mod + dst;
             break;
 
+          // ===== E SERIES =====
+          case 'AT-TEMPORARY':
+            result = ff + pur + pos + dst;
+            break;
+
+          // ===== F SERIES =====
           case 'VANITY':
             result = (sp * yr) + dst;
             break;
 
           case 'SPECIAL-EVENT':
             result = sp + dst;
+            break;
+
+          // ===== H SERIES =====
+          case 'PERMIT-STORAGE':
+            result = pos + dst;
             break;
         }
 
@@ -248,7 +267,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   }
 
   // =====================================================
-  // TOTAL AMOUNT COMPUTATION
+  // TOTAL AMOUNT
   // =====================================================
   private setupTotalComputation(): void {
     let totalCtrl = this.form.get('totalAmount');
