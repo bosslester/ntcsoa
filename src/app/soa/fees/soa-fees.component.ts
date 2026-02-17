@@ -15,6 +15,20 @@ type RocRow = {
   sur100: number;
 };
 
+interface AmateurRow {
+  purc?: number;
+  POS?: number;
+  STF?: number;
+  ff?: number;
+  CPF?: number;
+  LF?: number;
+  ROC?: number;
+  WOD?: number;
+  DST?: number;
+  SUR50?: number;
+  SUR100?: number;
+}
+
 @Component({
   selector: 'app-soa-fees',
   standalone: true,
@@ -51,28 +65,23 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   // =====================================================
   // COMPLETE AMATEUR TYPES  
   // =====================================================
-  private readonly AMATEUR_TYPES = [
-    'AT-ROC-NEW',
-    'AT-ROC-RENEWAL',
-    'AT-ROC-MOD',
-    'AT-RSL-PUR/POS',
-    'AT-RSL NEW',
-    'AT-RSL RENEWAL',
-    'AT-RSL-MOD',
-    'PERMIT-SELL/TRANSFER',
-    'AT-LIFETIME-PURPOS',
-    'AT-LIFETIME',
-    'AT-LIFETIME MOD',
-    'AT-CLUB-PUR/POS',
-    'AT-CLUB RSL NEW',
-    'AT-CLUB RSL RENEWAL',
-    'AT-CLUB RSL MOD',
-    'TEMPORARY-PERMIT TO OPERATE',
-    'SPECIAL PERMIT FOR THE ISE OF VANITY CALL SIGN(NEW)',
-    'SPECIAL PERMIT FOR THE ISE OF VANITY CALL SIGN(RENEWAL)',
-    'SPECIAL PERMIT FOR THE ISE OF VANITY CALL SIGN',
-    'PERMIT TO POSSESS FOR STORAGE OF AMATEUR RADIO STATIONS',
-  ];
+  private readonly AMATEUR_TYPES: Record<string, AmateurRow> = {
+    'AT-ROC':{ purc: 0, POS: 0, STF: 0, ff: 0, CPF: 0, LF: 0, ROC: 60, WOD: 50, DST: 30, SUR50: 30, SUR100: 60 },
+    'AT-RSL CLASS A':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 120, ROC: 60, WOD: 50, DST: 30, SUR50: 60, SUR100: 120},
+    'AT-RSL CLASS B':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 132, ROC: 60, WOD: 50, DST: 30, SUR50: 66, SUR100: 132},
+    'AT-RSL CLASS C':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 144, ROC: 60, WOD: 50, DST: 30, SUR50: 72, SUR100: 144},
+    'AT-RSL CLASS D':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 144, ROC: 60, WOD: 50, DST: 30, SUR50: 72, SUR100: 144},
+    'AT-LIFETIME':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 50, ROC: 60, WOD: 50, DST: 30, SUR50: 0, SUR100: 0},
+    'AT-CLUB RSL SIMPLEX':{ purc: 50, POS: 50, STF: 50, ff: 180, CPF: 600, LF: 700, ROC: 60, WOD: 50, DST: 30, SUR50: 350, SUR100: 700},
+    'AT-CLUB REPEATER':{ purc: 50, POS: 50, STF: 50, ff: 180, CPF: 600, LF: 1320, ROC: 60, WOD: 50, DST: 30, SUR50: 660, SUR100: 1320},
+    'TEMPORARY PERMIT FOREIGN': {purc: 0, POS: 0, STF: 0, ff: 0, CPF: 0, LF: 0, ROC: 0, WOD: 0, DST: 0, SUR50: 0, SUR100: 0},
+    'CLASS A':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 120, ROC: 60, WOD: 0, DST: 30, SUR50: 0, SUR100: 0},
+    'CLASS B':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 132, ROC: 60, WOD: 0, DST: 30, SUR50: 0, SUR100: 0},
+    'CLASS C':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 144, ROC: 60, WOD: 0, DST: 30, SUR50: 0, SUR100: 0},
+
+    'SPECIAL EVENT':{ purc: 0, POS: 0, STF: 0, ff: 120, CPF: 0, LF: 0, ROC: 60, WOD: 0, DST: 30, SUR50: 30, SUR100: 0},
+    'VANITY':{ purc: 50, POS: 50, STF: 50, ff: 1000, CPF: 0, LF: 0, ROC: 60, WOD: 0, DST: 30, SUR50: 30, SUR100: 0},
+  };
 
   // =====================================================
   // TOTAL FIELDS
@@ -229,7 +238,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   }
 
   // =====================================================
-  // YOUR 21 AMATEUR FORMULAS (UNCHANGED)
+  // 21 AMATEUR FORMULAS (UNCHANGED)
   // =====================================================
   private setupAmateurFormulas(): void {
 
