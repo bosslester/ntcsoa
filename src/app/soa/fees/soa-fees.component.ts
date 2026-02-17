@@ -269,53 +269,152 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
 
       switch (String(type)) {
 
-        case 'AT-ROC-NEW':
-          result = (lf * yr) + dst;
-          break;
+  // ==============================
+  // A. AT-ROC
+  // ==============================
 
-        case 'AT-ROC-RENEWAL':
-          result = (lf * yr) + dst + sur;
-          break;
+  // A.1 AT-ROC (NEW)
+  // FEE AT-ROC = (ROC)(YR) + DST
+  case 'A1-AT-ROC-NEW':
+    result = (lf * yr) + dst;
+    break;
 
-        case 'AT-ROC-MOD':
-          result = mod + dst;
-          break;
+  // A.2 AT-ROC (RENEWAL)
+  // FEE AT-ROC = (ROC)(YR) + DST + SUR
+  case 'A2-AT-ROC-RENEWAL':
+    result = (lf * yr) + dst + sur;
+    break;
 
-        case 'AT-RSL-PURPOS':
-        case 'AT-LIFETIME-PURPOS':
-        case 'AT-CLUB-PURPOS':
-          result = pur + pos + dst;
-          break;
+  // A.3 AT-ROC (MODIFICATION)
+  // FEE AT-ROC = MOD + DST
+  case 'A3-AT-ROC-MODIFICATION':
+    result = mod + dst;
+    break;
 
-        case 'PERMIT-STF':
-        case 'SPECIAL-EVENT':
-          result = sp + dst;
-          break;
 
-        case 'AT-CLUB-NEW':
-          result = ff + cpf + (lf * yr) + dst;
-          break;
+  // ==============================
+  // B. AT-RSL
+  // ==============================
 
-        case 'AT-CLUB-RENEWAL':
-          result = (lf * yr) + dst + sur;
-          break;
+  // B.1 AT-RSL Permit to Purchase/Possess
+  // FEE PUR/POS = (PUR)(UNIT) + (POS)(UNIT) + DST
+  case 'B1-AT-RSL-PURPOS':
+    result = pur + pos + dst;
+    break;
 
-        case 'AT-CLUB-MOD':
-          result = ff + cpf + mod + dst;
-          break;
+  // B.2 AT-RSL (NEW)
+  // FEE AT-RSL = FF + (LF)(YR) + DST
+  case 'B2-AT-RSL-NEW':
+    result = ff + (lf * yr) + dst;
+    break;
 
-        case 'AT-TEMPORARY':
-          result = ff + pur + pos + dst;
-          break;
+  // B.3 AT-RSL (RENEWAL)
+  // FEE AT-RSL = (LF)(YR) + DST + SUR
+  case 'B3-AT-RSL-RENEWAL':
+    result = (lf * yr) + dst + sur;
+    break;
 
-        case 'VANITY':
-          result = (sp * yr) + dst;
-          break;
+  // B.4 AT-RSL (MODIFICATION)
+  // FEE AT-RSL = FF + MOD + DST
+  case 'B4-AT-RSL-MODIFICATION':
+    result = ff + mod + dst;
+    break;
 
-        case 'PERMIT-STORAGE':
-          result = pos + dst;
-          break;
-      }
+  // B.5 Permit to Sell/Transfer
+  // FEE STF = (STF)(UNIT) + DST
+  case 'B5-PERMIT-STF':
+    result = sp + dst;
+    break;
+
+
+  // ==============================
+  // C. AT-LIFETIME
+  // ==============================
+
+  // C.1 AT-LIFETIME Permit to Purchase/Possess
+  case 'C1-AT-LIFETIME-PURPOS':
+    result = pur + pos + dst;
+    break;
+
+  // C.2 AT-LIFETIME
+  // FEE AT-LIFETIME = LF + DST
+  case 'C2-AT-LIFETIME':
+    result = lf + dst;
+    break;
+
+  // C.3 AT-LIFETIME (MODIFICATION)
+  case 'C3-AT-LIFETIME-MODIFICATION':
+    result = ff + mod + dst;
+    break;
+
+
+  // ==============================
+  // D. AT-CLUB
+  // ==============================
+
+  // D.1 AT-CLUB Permit to Purchase/Possess
+  case 'D1-AT-CLUB-PURPOS':
+    result = pur + pos + dst;
+    break;
+
+  // D.2 AT-CLUB RSL (NEW)
+  case 'D2-AT-CLUB-NEW':
+    result = ff + cpf + (lf * yr) + dst;
+    break;
+
+  // D.3 AT-CLUB RSL (RENEWAL)
+  case 'D3-AT-CLUB-RENEWAL':
+    result = (lf * yr) + dst + sur;
+    break;
+
+  // D.4 AT-CLUB RSL (MODIFICATION)
+  case 'D4-AT-CLUB-MODIFICATION':
+    result = ff + cpf + mod + dst;
+    break;
+
+
+  // ==============================
+  // E. Temporary Permit
+  // ==============================
+
+  case 'E-TEMPORARY':
+    result = ff + pur + pos + dst;
+    break;
+
+
+  // ==============================
+  // F. Vanity Call Sign
+  // ==============================
+
+  // F.1 NEW
+  case 'F1-VANITY-NEW':
+    result = (sp * yr) + dst;
+    break;
+
+  // F.2 RENEWAL
+  case 'F2-VANITY-RENEWAL':
+    result = (sp * yr) + dst;
+    break;
+
+
+  // ==============================
+  // G. Special Event
+  // ==============================
+
+  case 'G-SPECIAL-EVENT':
+    result = sp + dst;
+    break;
+
+
+  // ==============================
+  // H. Permit to Possess Storage
+  // ==============================
+
+  case 'H-PERMIT-STORAGE':
+    result = pos + dst;
+    break;
+}
+
 
       this.safePatch(this.form.get('amRadioOperatorsCert')!, result);
     });
