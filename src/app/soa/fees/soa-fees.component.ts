@@ -23,10 +23,24 @@ interface AmateurRow {
   CPF?: number;
   LF?: number;
   ROC?: number;
-  WOD?: number;
+  MOD?: number;
   DST?: number;
   SUR50?: number;
   SUR100?: number;
+}
+
+interface ShipStationFeeRow {
+  FF: number;
+  PURF: number;
+  POSF: number;
+  CPF: number;
+  LF: number;
+  IF: number;
+  MOD: number;
+  DST: number;
+  SUR50: number;
+  SUR100: number;
+  cert?: number;
 }
 
 @Component({
@@ -66,25 +80,51 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   // COMPLETE AMATEUR TYPES  
   // =====================================================
   private readonly AMATEUR_TYPES: Record<string, AmateurRow> = {
-    'AT-ROC':{ purc: 0, POS: 0, STF: 0, ff: 0, CPF: 0, LF: 0, ROC: 60, WOD: 50, DST: 30, SUR50: 30, SUR100: 60 },
-    'AT-RSL CLASS A':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 120, ROC: 60, WOD: 50, DST: 30, SUR50: 60, SUR100: 120},
-    'AT-RSL CLASS B':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 132, ROC: 60, WOD: 50, DST: 30, SUR50: 66, SUR100: 132},
-    'AT-RSL CLASS C':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 144, ROC: 60, WOD: 50, DST: 30, SUR50: 72, SUR100: 144},
-    'AT-RSL CLASS D':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 144, ROC: 60, WOD: 50, DST: 30, SUR50: 72, SUR100: 144},
-    'AT-LIFETIME':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 50, ROC: 60, WOD: 50, DST: 30, SUR50: 0, SUR100: 0},
-    'AT-CLUB RSL SIMPLEX':{ purc: 50, POS: 50, STF: 50, ff: 180, CPF: 600, LF: 700, ROC: 60, WOD: 50, DST: 30, SUR50: 350, SUR100: 700},
-    'AT-CLUB REPEATER':{ purc: 50, POS: 50, STF: 50, ff: 180, CPF: 600, LF: 1320, ROC: 60, WOD: 50, DST: 30, SUR50: 660, SUR100: 1320},
-    'TEMPORARY PERMIT FOREIGN': {purc: 0, POS: 0, STF: 0, ff: 0, CPF: 0, LF: 0, ROC: 0, WOD: 0, DST: 0, SUR50: 0, SUR100: 0},
-    'CLASS A':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 120, ROC: 60, WOD: 0, DST: 30, SUR50: 0, SUR100: 0},
-    'CLASS B':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 132, ROC: 60, WOD: 0, DST: 30, SUR50: 0, SUR100: 0},
-    'CLASS C':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 144, ROC: 60, WOD: 0, DST: 30, SUR50: 0, SUR100: 0},
+    'AT-ROC':{ purc: 0, POS: 0, STF: 0, ff: 0, CPF: 0, LF: 0, ROC: 60, MOD: 50, DST: 30, SUR50: 30, SUR100: 60 },
+    'AT-RSL CLASS A':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 120, ROC: 60, MOD: 50, DST: 30, SUR50: 60, SUR100: 120},
+    'AT-RSL CLASS B':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 132, ROC: 60, MOD: 50, DST: 30, SUR50: 66, SUR100: 132},
+    'AT-RSL CLASS C':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 144, ROC: 60, MOD: 50, DST: 30, SUR50: 72, SUR100: 144},
+    'AT-RSL CLASS D':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 144, ROC: 60, MOD: 50, DST: 30, SUR50: 72, SUR100: 144},
+    'AT-LIFETIME':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 50, ROC: 60, MOD: 50, DST: 30, SUR50: 0, SUR100: 0},
+    'AT-CLUB RSL SIMPLEX':{ purc: 50, POS: 50, STF: 50, ff: 180, CPF: 600, LF: 700, ROC: 60, MOD: 50, DST: 30, SUR50: 350, SUR100: 700},
+    'AT-CLUB REPEATER':{ purc: 50, POS: 50, STF: 50, ff: 180, CPF: 600, LF: 1320, ROC: 60, MOD: 50, DST: 30, SUR50: 660, SUR100: 1320},
+    'TEMPORARY PERMIT FOREIGN': {purc: 0, POS: 0, STF: 0, ff: 0, CPF: 0, LF: 0, ROC: 0, MOD: 0, DST: 0, SUR50: 0, SUR100: 0},
+    'CLASS A':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 120, ROC: 60, MOD: 0, DST: 30, SUR50: 0, SUR100: 0},
+    'CLASS B':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 132, ROC: 60, MOD: 0, DST: 30, SUR50: 0, SUR100: 0},
+    'CLASS C':{ purc: 50, POS: 50, STF: 50, ff: 0, CPF: 0, LF: 144, ROC: 60, MOD: 0, DST: 30, SUR50: 0, SUR100: 0},
 
-    'SPECIAL EVENT':{ purc: 0, POS: 0, STF: 0, ff: 120, CPF: 0, LF: 0, ROC: 60, WOD: 0, DST: 30, SUR50: 30, SUR100: 0},
-    'VANITY':{ purc: 50, POS: 50, STF: 50, ff: 1000, CPF: 0, LF: 0, ROC: 60, WOD: 0, DST: 30, SUR50: 30, SUR100: 0},
+    'SPECIAL EVENT':{ purc: 0, POS: 0, STF: 0, ff: 120, CPF: 0, LF: 0, ROC: 60, MOD: 0, DST: 30, SUR50: 30, SUR100: 0},
+    'VANITY':{ purc: 50, POS: 50, STF: 50, ff: 1000, CPF: 0, LF: 0, ROC: 60, MOD: 0, DST: 30, SUR50: 30, SUR100: 0},
   };
 
   // =====================================================
-  // TOTAL FIELDS
+  // COMPLETE SHIP STATION FEES
+  // =====================================================
+  private readonly SHIP_STATION_FEES: Record<string, ShipStationFeeRow> = {
+    'DOMESTIC TRADE HIGH POW': { FF: 180, PURF: 240, POSF: 120, CPF: 720, LF: 840, IF: 720, MOD: 180, DST: 30, SUR50: 420, SUR100: 840 },
+    'DOMESTIC TRADE MEDIUM POW': { FF: 180, PURF: 120, POSF: 96, CPF: 600, LF: 720, IF: 720, MOD: 180, DST: 30, SUR50: 360, SUR100: 720 },
+    'DOMESTIC TRADE LOW POW': { FF: 180, PURF: 60, POSF: 60, CPF: 480, LF: 600, IF: 720, MOD: 180, DST: 30, SUR50: 300, SUR100: 600 },
+
+    'INTERNATIONAL TRADE HIGH POW': { FF: 180, PURF: 240, POSF: 120, CPF: 1200, LF: 1500, IF: 1200, MOD: 180, DST: 30, SUR50: 750, SUR100: 1500 },
+    'INTERNATIONAL TRADE MEDIUM POW': { FF: 180, PURF: 120, POSF: 96, CPF: 1200, LF: 1500, IF: 1200, MOD: 180, DST: 30, SUR50: 750, SUR100: 1500 },
+    'INTERNATIONAL TRADE LOW POW': { FF: 180, PURF: 96, POSF: 60, CPF: 1200, LF: 1500, IF: 1200, MOD: 180, DST: 30, SUR50: 750, SUR100: 1500 },
+    'INTERNATIONAL SESC/LRIT/SSAS/SESFB':{ FF: 180, PURF: 360, POSF: 360, CPF: 1200, LF: 1440, IF: 1200, MOD: 180, DST: 30, SUR50: 720, SUR100: 1440 },
+
+    'PRIV COASTAL RADTELEGRAPHY HIGH POW': { FF: 180, PURF: 240, POSF: 120, CPF: 1320, LF: 1440, IF: 720, MOD: 180, DST: 30, SUR50: 720, SUR100: 1440 },
+    'PRIV COASTAL RADTELEGRAPHY MEDIUM POW': { FF: 180, PURF: 120, POSF: 96, CPF: 960, LF: 1200, IF: 720, MOD: 180, DST: 30, SUR50: 600, SUR100: 1200 },
+    'PRIV COASTAL RADTELEGRAPHY LOW POW': { FF: 180, PURF: 96, POSF: 60, CPF: 600, LF: 1080, IF: 720, MOD: 180, DST: 30, SUR50: 540, SUR100: 1080 },
+
+    'PRIV COASTAL RADTELEPHONY HIGH POW': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 720, IF: 720, MOD: 180, DST: 30, SUR50: 360, SUR100: 720 },
+    'PRIV COASTAL RADTELEPHONY LOW POW': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 480, IF: 480, MOD: 180, DST: 30, SUR50: 240, SUR100: 480 },
+    
+    'DELETION ': { FF: 180, cert: 200, PURF: 0, POSF: 0, CPF: 0, LF: 0, IF: 0, MOD: 0, DST: 30, SUR50: 0, SUR100: 0 },
+  };
+
+
+
+
+  // =====================================================
+  // TOTAL FIELDS 
   // =====================================================
   private readonly TOTAL_FIELDS: string[] = [
     'licPermitToPurchase',
