@@ -52,9 +52,50 @@
     <div class="r"><div class="l">Documentary Stamp Tax (DST)</div><input type="number" class="a right" formControlName="dst"></div>
 
     <div class="totalRow">
-      <div class="totalLbl">TOTAL AMOUNT</div>
-      <div class="totalBox"><input type="number" class="totalIn" formControlName="totalAmount" readonly></div>
-    </div>
+  <div class="totalLbl">TOTAL AMOUNT</div>
+  <div class="totalBox">
+    <input
+      type="number"
+      class="totalIn"
+      [value]="
+        (form.get('licPermitToPurchase')?.value || 0) +
+        (form.get('licFilingFee')?.value || 0) +
+        (form.get('licPermitToPossess')?.value || 0) +
+        (form.get('licConstructionPermitFee')?.value || 0) +
+        (form.get('licRadioStationLicense')?.value || 0) +
+        (form.get('licInspectionFee')?.value || 0) +
+        (form.get('licSUF')?.value || 0) +
+        (form.get('licFinesPenalties')?.value || 0) +
+        (form.get('licSurcharges')?.value || 0) +
+
+        (form.get('appRegistrationFee')?.value || 0) +
+        (form.get('appSupervisionRegulationFee')?.value || 0) +
+        (form.get('appVerificationAuthFee')?.value || 0) +
+        (form.get('appExaminationFee')?.value || 0) +
+        (form.get('appClearanceCertificationFee')?.value || 0) +
+        (form.get('appModificationFee')?.value || 0) +
+        (form.get('appMiscIncome')?.value || 0) +
+        (form.get('appOthers')?.value || 0) +
+
+        (form.get('perPermitFees')?.value || 0) +
+        (form.get('perInspectionFee')?.value || 0) +
+        (form.get('perFilingFee')?.value || 0) +
+        (form.get('perSurcharges')?.value || 0) +
+
+        (form.get('amRadioStationLicense')?.value || 0) +
+        (form.get('amRadioOperatorsCert')?.value || 0) +
+        (form.get('amApplicationFee')?.value || 0) +
+        (form.get('amFilingFee')?.value || 0) +
+        (form.get('amSeminarFee')?.value || 0) +
+        (form.get('amSurcharges')?.value || 0) +
+
+        (form.get('dst')?.value || 0)
+      "
+      readonly
+    />
+  </div>
+</div>
+
   </ng-container>
 
 </div>
