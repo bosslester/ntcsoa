@@ -116,7 +116,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
 
     'PRIV COASTAL RADTELEPHONY HIGH POW': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 720, IF: 720, MOD: 180, DST: 30, SUR50: 360, SUR100: 720 },
     'PRIV COASTAL RADTELEPHONY LOW POW': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 480, IF: 480, MOD: 180, DST: 30, SUR50: 240, SUR100: 480 },
-    
+
     'DELETION ': { FF: 180, cert: 200, PURF: 0, POSF: 0, CPF: 0, LF: 0, IF: 0, MOD: 0, DST: 30, SUR50: 0, SUR100: 0 },
   };
 
@@ -169,6 +169,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
 
     this.setupRocComputation();
     this.setupAmateurFormulas();
+    this.setupShipStationFormulas();
     this.setupTotalComputation();
   }
 
@@ -459,6 +460,202 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
       this.safePatch(this.form.get('amRadioOperatorsCert')!, result);
     });
   }
+
+  // =====================================================
+// SHIP STATION FORMULAS (A–F)
+// =====================================================
+private setupShipStationFormulas(): void {
+
+  const typeCtrl  = this.pickCtrl(['shipType','shipStationType','selectedShip']);
+  const yearsCtrl = this.pickCtrl(['shipYears','years','numberOfYears']);
+  const unitsCtrl = this.pickCtrl(['shipUnits','units']);
+
+  if (!typeCtrl) return;
+
+  combineLatest([
+    typeCtrl.valueChanges.pipe(startWith(typeCtrl.value)),
+    yearsCtrl?.valueChanges.pipe(startWith(yearsCtrl.value)) ?? [],
+    unitsCtrl?.valueChanges.pipe(startWith(unitsCtrl.value)) ?? [],
+  ])
+  .pipe(takeUntil(this.destroy$))
+  .subscribe(([type, years, units]) => {
+
+    const row = this.SHIP_STATION_FEES[String(type)?.trim()];
+    if (!row) return;
+
+    const yr  = this.toNumber(years);
+    const unit = this.toNumber(units);
+    const sur = this.toNumber(this.form.get('licSurcharges')?.value);
+
+    let result = 0;
+
+    switch (String(type)) {
+
+      // =====================================================
+      // A.1 Permit to Purchase / Possess
+      // FEE = (FF)(UNIT) + (PUR)(UNIT) + (POS)(UNIT) + DST
+      // =====================================================
+      case 'A1-PURPOS':
+        result =
+          (row.FF * unit) +
+          (row.PURF * unit) +
+          (row.POSF * unit) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // A.2 Domestic Trade NEW (No Installed Equipment)
+      // FEE = CPF + (LF)(YR) + (IF)(YR) + DST
+      // =====================================================
+      case 'A2-DOM-NEW-NO-EQ':
+        result =
+          row.CPF +
+          (row.LF * yr) +
+          (row.IF * yr) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // A.3 Domestic Trade NEW (With Installed Equipment)
+      // FEE = FF + PUR + POS + CPF + LF + IF + DST
+      // =====================================================
+      case 'A3-DOM-NEW-WITH-EQ':
+        result =
+          (row.FF * unit) +
+          (row.PURF * unit) +
+          (row.POSF * unit) +
+          row.CPF +
+          (row.LF * yr) +
+          (row.IF * yr) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // A.4 Domestic Trade RENEWAL
+      // FEE = (LF)(YR) + (IF)(YR) + DST + SUR
+      // =====================================================
+      case 'A4-DOM-RENEWAL':
+        result =
+          (row.LF * yr) +
+          (row.IF * yr) +
+          row.DST +
+          sur;
+        break;
+
+      // =====================================================
+      // A.5 Domestic Trade MODIFICATION
+      // FEE = FF + CPF + MOD + DST
+      // =====================================================
+      case 'A5-DOM-MOD':
+        result =
+          row.FF +
+          row.CPF +
+          row.MOD +
+          row.DST;
+        break;
+
+      // =====================================================
+      // B.1 International Trade RENEWAL
+      // =====================================================
+      case 'B1-INT-RENEWAL':
+        result =
+          (row.LF * yr) +
+          (row.IF * yr) +
+          row.DST +
+          sur;
+        break;
+
+      // =====================================================
+      // B.2 International Trade MODIFICATION
+      // =====================================================
+      case 'B2-INT-MOD':
+        result =
+          (row.FF * unit) +
+          (row.PURF * unit) +
+          (row.POSF * unit) +
+          row.CPF +
+          row.MOD +
+          row.DST;
+        break;
+
+      // =====================================================
+      // C.1 Private Coastal Permit to Purchase/Possess
+      // =====================================================
+      case 'C1-PRIV-PURPOS':
+        result =
+          (row.FF * unit) +
+          (row.PURF * unit) +
+          (row.POSF * unit) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // C.2 Private Coastal NEW
+      // =====================================================
+      case 'C2-PRIV-NEW':
+        result =
+          row.CPF +
+          (row.LF * yr) +
+          (row.IF * yr) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // C.3 Private Coastal RENEWAL
+      // =====================================================
+      case 'C3-PRIV-RENEWAL':
+        result =
+          (row.LF * yr) +
+          (row.IF * yr) +
+          row.DST +
+          sur;
+        break;
+
+      // =====================================================
+      // C.4 Private Coastal MODIFICATION
+      // =====================================================
+      case 'C4-PRIV-MOD':
+        result =
+          row.FF +
+          row.CPF +
+          row.MOD +
+          row.DST;
+        break;
+
+      // =====================================================
+      // D. Permit to Possess for Storage
+      // =====================================================
+      case 'D-POS-STORAGE':
+        result =
+          (row.POSF * unit) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // E. Permit to Sell / Transfer
+      // =====================================================
+      case 'E-SELL-TRANSFER':
+        result =
+          (row.POSF * unit) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // F. Deletion Certificate
+      // FEE = FF * CERT + DST
+      // =====================================================
+      case 'F-DELETION':
+        result =
+          (row.FF * (row.cert ?? 1)) +
+          row.DST;
+        break;
+    }
+
+    this.safePatch(this.form.get('licRadioStationLicense')!, result);
+    this.safePatch(this.form.get('dst')!, row.DST);
+  });
+}
+
 
   // =====================================================
   // TOTAL COMPUTATION
