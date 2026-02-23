@@ -132,7 +132,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'DELETION ': { FF: 180, cert: 200, PURF: 0, POSF: 0, CPF: 0, LF: 0, IF: 0, MOD: 0, DST: 30, SUR50: 0, SUR100: 0 },
   };
 
-  private readonly COASTAL_STATION_LICENSE: Record<string, ShipStationFeeRow> = {
+  private readonly COASTAL_STATION_LICENSE: Record<string, CoastalStationLicenseRow> = {
     'HIGH POWER': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 720, IF: 720, MOD: 180, DST: 30, SUR50: 360, SUR100: 720 },
     'MEDIUM POWER': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 600, IF: 720, MOD: 180, DST: 30, SUR50: 300, SUR100: 600 },
     'LOW POWER': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 480, IF: 480, MOD: 180, DST: 30, SUR50: 240, SUR100: 480 },
@@ -179,6 +179,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
 
     'dst',
   ];
+  PUBLIC_COASTAL_FEES: any;
 
   // =========
   // LIFECYCLE
@@ -674,6 +675,111 @@ private setupShipStationFormulas(): void {
     this.safePatch(this.form.get('dst')!, row.DST);
   });
 }
+
+
+
+private setupPublicCoastalFormulas(): void {
+
+  const typeCtrl  = this.pickCtrl(['coastalType','stationType','selectedType']);
+  const yearsCtrl = this.pickCtrl(['years','numberOfYears']);
+  const unitsCtrl = this.pickCtrl(['units','numberOfUnits']);
+
+  if (!typeCtrl) return;
+
+  combineLatest([
+    typeCtrl.valueChanges.pipe(startWith(typeCtrl.value)),
+    yearsCtrl?.valueChanges.pipe(startWith(yearsCtrl.value)) ?? [],
+    unitsCtrl?.valueChanges.pipe(startWith(unitsCtrl.value)) ?? [],
+  ])
+  .pipe(takeUntil(this.destroy$))
+  .subscribe(([type, years, units]) => {
+
+    const row = this.PUBLIC_COASTAL_FEES[String(type)?.trim()];
+    if (!row) return;
+
+    const yr   = this.toNumber(years);
+    const unit = this.toNumber(units);
+    const sur  = this.toNumber(this.form.get('licSurcharges')?.value);
+
+    let result = 0;
+
+    switch (String(type)) {
+
+      // =====================================================
+      // A.1 Permit to Purchase / Possess
+      // FEE = (FF)(UNIT) + (PURF)(UNIT) + (POSF)(UNIT) + DST
+      // =====================================================
+      case 'A1-PURPOS':
+        result =
+          (row.FF * unit) +
+          (row.PURF * unit) +
+          (row.POSF * unit) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // A.2 Public Coastal Station License (NEW)
+      // FEE = CRF + (LF)(YR) + (IF)(VR) + DST
+      // =====================================================
+      case 'A2-COASTAL-NEW':
+        result =
+          row.CRF +
+          (row.LF * yr) +
+          (row.IF * unit) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // A.3 Public Coastal Station License (MOD)
+      // FEE = FF + CPF + MOD + DST
+      // =====================================================
+      case 'A3-COASTAL-MOD':
+        result =
+          row.FF +
+          row.CPF +
+          row.MOD +
+          row.DST;
+        break;
+
+      // =====================================================
+      // A.4 Permit to Sell / Transfer
+      // FEE = (STF)(UNIT) + DST
+      // =====================================================
+      case 'A4-SELL-TRANSFER':
+        result =
+          (row.STF * unit) +
+          row.DST;
+        break;
+
+      // =====================================================
+      // A.5 Public Coastal Station License (RENEWAL)
+      // FEE = (LF)(VR) + (IF)(YR) + DST + SUR
+      // =====================================================
+      case 'A5-COASTAL-RENEWAL':
+        result =
+          (row.LF * unit) +
+          (row.IF * yr) +
+          row.DST +
+          sur;
+        break;
+
+      // =====================================================
+      // A.6 Public Coastal Station License (RENEWAL - duplicate)
+      // =====================================================
+      case 'A6-COASTAL-RENEWAL':
+        result =
+          (row.LF * unit) +
+          (row.IF * yr) +
+          row.DST +
+          sur;
+        break;
+    }
+
+    this.safePatch(this.form.get('licPublicCoastal')!, result);
+    this.safePatch(this.form.get('dst')!, row.DST);
+  });
+}
+
 
 
   // =====================================================

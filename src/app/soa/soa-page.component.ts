@@ -90,35 +90,36 @@ export class SoaPageComponent {
       licFinesPenalties: [0],
       licSurcharges: [0],
 
-// PERMIT
-perPermitFees: [0],
-perInspectionFee: [0],
-perFilingFee: [0],
-perSurcharges: [0],
+      // PERMIT
+      perPermitFees: [0],
+      perInspectionFee: [0],
+      perFilingFee: [0],
+      perSurcharges: [0],
 
-// AMATEUR
-amRadioStationLicense: [0],
-amRadioOperatorsCert: [0],
-amApplicationFee: [0],
-amFilingFee: [0],
-amSeminarFee: [0],
-amSurcharges: [0],
+      // AMATEUR
+      amRadioStationLicense: [0],
+      amRadioOperatorsCert: [0],
+      amApplicationFee: [0],
+      amFilingFee: [0],
+      amSeminarFee: [0],
+      amSurcharges: [0],
 
-// OTHER
-appRegistrationFee: [0],
-appSupervisionRegulationFee: [0],
-appVerificationAuthFee: [0],
-appExaminationFee: [0],
-appClearanceCertificationFee: [0],
-appModificationFee: [0],
-appMiscIncome: [0],
-appOthers: [0],
+      // OTHER
+      appRegistrationFee: [0],
+      appSupervisionRegulationFee: [0],
+      appVerificationAuthFee: [0],
+      appExaminationFee: [0],
+      appClearanceCertificationFee: [0],
+      appModificationFee: [0],
+      appMiscIncome: [0],
+      appOthers: [0],
 
-// GLOBAL
-dst: [0],
-totalAmount: [{ value: 0, disabled: true }]
-    });
-  }
+      // GLOBAL
+      dst: [0],
+      totalAmount: [{ value: 0, disabled: true }]
+          }
+        );
+      }
 
   // ✅ SAVE button from right panel -> calls this
 save(): void {
