@@ -42,6 +42,18 @@ interface ShipStationFeeRow {
   SUR100: number;
   cert?: number;
 }
+interface CoastalStationLicenseRow {
+  FF: number;
+  PURF: number;
+  POSF: number;
+  CPF: number;
+  LF: number;
+  IF: number;
+  MOD: number;
+  DST: number;
+  SUR50: number;
+  SUR100: number;
+}
 
 @Component({
   selector: 'app-soa-fees',
@@ -120,7 +132,14 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'DELETION ': { FF: 180, cert: 200, PURF: 0, POSF: 0, CPF: 0, LF: 0, IF: 0, MOD: 0, DST: 30, SUR50: 0, SUR100: 0 },
   };
 
-
+  private readonly COASTAL_STATION_LICENSE: Record<string, ShipStationFeeRow> = {
+    'HIGH POWER': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 720, IF: 720, MOD: 180, DST: 30, SUR50: 360, SUR100: 720 },
+    'MEDIUM POWER': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 600, IF: 720, MOD: 180, DST: 30, SUR50: 300, SUR100: 600 },
+    'LOW POWER': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 480, IF: 480, MOD: 180, DST: 30, SUR50: 240, SUR100: 480 },
+    'hf high power': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 720, IF: 720, MOD: 180, DST: 30, SUR50: 360, SUR100: 720 },
+    'hf medium power': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 600, IF: 720, MOD: 180, DST: 30, SUR50: 300, SUR100: 600 },
+    'hf low power': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 480, IF: 480, MOD: 180, DST: 30, SUR50: 240, SUR100: 480 },
+  };
 
 
   // =====================================================

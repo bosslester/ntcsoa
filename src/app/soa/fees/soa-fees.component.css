@@ -37,7 +37,14 @@
   border: 1px solid var(--line);
   background: #fff;
   font-size: 11px;
+
+  /* ✅ ADDED: make ALL amounts right-aligned + bold (manual + autofill) */
+  text-align: right;
+  font-weight: bold;
+  padding-right: 8px;
 }
+
+/* keep this (ok pa rin) */
 .a.right{
   text-align: right;
   font-weight: bold;
@@ -67,4 +74,14 @@
   font-weight: bold;
   text-align: center;
   font-size: 12px;
+}
+
+/* ✅ OPTIONAL ADDED: remove number spinners (clean look) */
+.a[type="number"]::-webkit-outer-spin-button,
+.a[type="number"]::-webkit-inner-spin-button{
+  -webkit-appearance: none;
+  margin: 0;
+}
+.a[type="number"]{
+  -moz-appearance: textfield;
 }
