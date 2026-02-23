@@ -10,6 +10,9 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./soa-right-panel.component.css']
 })
 export class SoaRightPanelComponent {
+printSOAPreview() {
+throw new Error('Method not implemented.');
+}
   @Input() form!: FormGroup;
 
   @Output() onSave = new EventEmitter<void>();

@@ -76,37 +76,47 @@ export class SoaPageComponent {
       accountingPosition: [''],
 
       // ===========================
-      // FEES placeholders (para hindi mag crash)
-      // If may kulang na controlName sa fees html mo, add dito.
+      // FEES (MUST MATCH SoaFeesComponent)
       // ===========================
-      isPurchase: [0],
-      isFilingFee: [0],
-      isPossess: [0],
-      rslConstruction: [0],
-      rslRadioStation: [0],
-      rslInspection: [0],
-      rslSUF: [0],
-      amnestyFine: [0],
-      rslSurcharge: [0],
-      permitPermitFees: [0],
-      permitInspection: [0],
-      permitFillingFee: [0],
-      permitSurcharge: [0],
-      rocRadioStation: [0],
-      rocOperatorFee: [0],
-      rocFilingFee: [0],
-      rocSeminarFee: [0],
-      rocSurcharge: [0],
-      otherRegistration: [0],
-      otherSRF: [0],
-      otherVerification: [0],
-      otherExam: [0],
-      otherClearanceandCertFee: [0],
-      otherModification: [0],
-      otherMiscIncome: [0],
-      dst: [0],
-      otherOthers: [0],
-      totalAmount: [0]
+
+      // LICENSE
+      licPermitToPurchase: [0],
+      licFilingFee: [0],
+      licPermitToPossess: [0],
+      licConstructionPermitFee: [0],
+      licRadioStationLicense: [0],
+      licInspectionFee: [0],
+      licSUF: [0],
+      licFinesPenalties: [0],
+      licSurcharges: [0],
+
+// PERMIT
+perPermitFees: [0],
+perInspectionFee: [0],
+perFilingFee: [0],
+perSurcharges: [0],
+
+// AMATEUR
+amRadioStationLicense: [0],
+amRadioOperatorsCert: [0],
+amApplicationFee: [0],
+amFilingFee: [0],
+amSeminarFee: [0],
+amSurcharges: [0],
+
+// OTHER
+appRegistrationFee: [0],
+appSupervisionRegulationFee: [0],
+appVerificationAuthFee: [0],
+appExaminationFee: [0],
+appClearanceCertificationFee: [0],
+appModificationFee: [0],
+appMiscIncome: [0],
+appOthers: [0],
+
+// GLOBAL
+dst: [0],
+totalAmount: [{ value: 0, disabled: true }]
     });
   }
 
