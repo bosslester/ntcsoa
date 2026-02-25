@@ -54,6 +54,19 @@ interface CoastalStationLicenseRow {
   SUR50: number;
   SUR100: number;
 }
+interface VHF_UHF_Fee_Row {
+  PURC?: number;
+  POS?: number;
+  FF?: number;
+  CPF?: number;
+  LF?: number;
+  SUF?: number;
+  REG?: number;
+  MOD?: number;
+  DST?: number;
+  SUR50?: number;
+  SUR100?: number;
+}
 
 @Component({
   selector: 'app-soa-fees',
@@ -133,12 +146,24 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   };
 
   private readonly COASTAL_STATION_LICENSE: Record<string, CoastalStationLicenseRow> = {
-    'HIGH POWER': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 720, IF: 720, MOD: 180, DST: 30, SUR50: 360, SUR100: 720 },
-    'MEDIUM POWER': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 600, IF: 720, MOD: 180, DST: 30, SUR50: 300, SUR100: 600 },
-    'LOW POWER': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 480, IF: 480, MOD: 180, DST: 30, SUR50: 240, SUR100: 480 },
-    'hf high power': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 720, IF: 720, MOD: 180, DST: 30, SUR50: 360, SUR100: 720 },
-    'hf medium power': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 600, IF: 720, MOD: 180, DST: 30, SUR50: 300, SUR100: 600 },
-    'hf low power': { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 480, IF: 480, MOD: 180, DST: 30, SUR50: 240, SUR100: 480 },
+    'HIGH POWER':       { FF: 180, PURF: 240, POSF: 120, CPF: 1200, LF: 2160, IF: 840, MOD: 180, DST: 30, SUR50: 1080,SUR100: 2160 },
+    'MEDIUM POWER':     { FF: 180, PURF: 120, POSF: 96, CPF: 840, LF: 1680, IF: 840, MOD: 180, DST: 30, SUR50: 840, SUR100: 1680 },
+    'LOW POWER':        { FF: 180, PURF: 196, POSF: 60, CPF: 480, LF: 1200, IF: 840, MOD: 180, DST: 30, SUR50: 600, SUR100: 1200 },
+    'hf high power':    { FF: 180, PURF: 240, POSF: 120, CPF: 480, LF: 1560, IF: 840, MOD: 180, DST: 30, SUR50: 780, SUR100: 1560 },
+    'hf medium power':  { FF: 180, PURF: 240, POSF: 120, CPF: 480, LF: 1080, IF: 720, MOD: 180, DST: 30, SUR50: 540, SUR100: 1080 },
+    'hf low power':     { FF: 180, PURF: 120, POSF: 96, CPF: 480, LF: 480, IF: 720, MOD: 180, DST: 30, SUR50: 240, SUR100: 480 },
+    'VHF':              { FF: 180, PURF: 96,  POSF: 60, CPF: 480, LF: 1200,  IF: 480, MOD: 180, DST: 30, SUR50: 600, SUR100: 1200 },
+  };
+
+  private readonly VHF_UHF_FEES: Record<string, VHF_UHF_Fee_Row> = {
+  'BASE RADIO':     { PURC: 120, POS: 96, FF: 180, CPF: 240, LF: 600, SUF: 80, REG: 2000, MOD: 180, DST: 30, SUR50: 300, SUR100: 600 },
+    'FIXED':        { PURC: 120, POS: 96, FF: 180, CPF: 240, LF: 480, SUF: 40, REG: 2000, MOD: 180, DST: 30, SUR50: 240, SUR100: 480 },
+    'FX/FB':        { PURC: 120, POS: 96, FF: 180, CPF: 240, LF: 1080, SUF: 120, REG: 2000, MOD: 180, DST: 30, SUR50: 540, SUR100: 1080 },
+    'MOBILE':       { PURC: 120, POS: 96, FF: 180, CPF: 240, LF: 360, SUF: 8, REG: 2000, MOD: 180, DST: 30, SUR50: 180, SUR100: 360 },
+    'PORTA BASE':   { PURC: 96,  POS: 60, FF: 180, CPF: 240, LF: 840, SUF: 80, REG: 1500, MOD: 180, DST: 30, SUR50: 420, SUR100: 840 },
+    'PORTA MOBILE': { PURC: 96 , POS :60 , FF :180 , CPF :240 , LF :240 , SUF :16 , REG :1500 , MOD :180 , DST :30 , SUR50 :300 , SUR100 :600 },
+    'PORTABLE':     { PURC :96 , POS :60 , FF :180 , CPF :0 , LF :240 , SUF :8 , REG :1500 , MOD :180 , DST :30 , SUR50 :120 , SUR100 :240 },
+    'REPEATER':     { PURC :240 ,POS :120 , FF :180 , CPF :600 , LF :1320 , SUF :0 , REG :3000 , MOD :180 , DST :30 , SUR50 :660 , SUR100 :1320 }
   };
 
 
