@@ -67,6 +67,17 @@ interface VHF_UHF_Fee_Row {
   SUR50?: number;
   SUR100?: number;
 }
+interface TVROFEEROw {
+  reg?: number;
+  ff?: number;
+  cpf?: number;
+  lf?: number;
+  if?: number;
+  mod?: number;
+  dst?: number;
+  surLF50?: number;
+  surLF100?: number;
+}
 
 @Component({
   selector: 'app-soa-fees',
@@ -164,6 +175,11 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'PORTA MOBILE': { PURC: 96 , POS :60 , FF :180 , CPF :240 , LF :240 , SUF :16 , REG :1500 , MOD :180 , DST :30 , SUR50 :300 , SUR100 :600 },
     'PORTABLE':     { PURC :96 , POS :60 , FF :180 , CPF :0 , LF :240 , SUF :8 , REG :1500 , MOD :180 , DST :30 , SUR50 :120 , SUR100 :240 },
     'REPEATER':     { PURC :240 ,POS :120 , FF :180 , CPF :600 , LF :1320 , SUF :0 , REG :3000 , MOD :180 , DST :30 , SUR50 :660 , SUR100 :1320 }
+  }; 
+
+  private readonly TVRO_FEES: Record<string, TVROFEEROw> = {
+    'TVRO': { reg: 6500, ff: 0, cpf: 0, lf: 2600, if: 0, mod: 180, dst: 30, surLF50: 1300, surLF100: 2600 },
+    'CATV station': { reg: 0, ff: 400, cpf: 1140, lf: 3600, if: 720, mod: 180, dst: 30, surLF50: 1800, surLF100: 3600 },
   };
 
 
@@ -803,7 +819,86 @@ private setupPublicCoastalFormulas(): void {
     this.safePatch(this.form.get('licPublicCoastal')!, result);
     this.safePatch(this.form.get('dst')!, row.DST);
   });
+} 
+
+
+
+// ===============================
+// TVRO REGISTRATION (COMM / NON-COMM)
+// FEETVROREG = REG + DST
+// ===============================
+private FEETVROREG(REG: number, DST: number): number {
+  return REG + DST;
 }
+
+
+// ===============================
+// TVRO STATION LICENSE (NEW)
+// FEETVRORSL = (LF)(YR) + DST
+// ===============================
+private FEETVRORSL_NEW(LF: number, YR: number, DST: number): number {
+  return (LF * YR) + DST;
+}
+
+
+// ===============================
+// TVRO STATION LICENSE (REN)
+// FEETVRORSL = (LF)(YR) + DST + SUR
+// ===============================
+private FEETVRORSL_REN(LF: number, YR: number, DST: number, SUR: number): number {
+  return (LF * YR) + DST + SUR;
+}
+
+
+// ===============================
+// TVRO STATION LICENSE (MOD)
+// FEEMOD = MOD + DST
+// ===============================
+private FEETVRO_MOD(MOD: number, DST: number): number {
+  return MOD + DST;
+}
+
+
+// ===============================
+// CATV STATION LICENSE (NEW)
+// FEECATVRSL = FF + CPF + (LF)(VR) + (IF)(YR) + DST
+// ===============================
+private FEECATV_NEW(
+  FF: number,
+  CPF: number,
+  LF: number,
+  VR: number,
+  IF: number,
+  YR: number,
+  DST: number
+): number {
+  return FF + CPF + (LF * VR) + (IF * YR) + DST;
+}
+
+
+// ===============================
+// CATV STATION LICENSE (REN)
+// FEECATVRSL = (LF)(YR) + (IF)(YR) + DST + SUR
+// ===============================
+private FEECATV_REN(
+  LF: number,
+  YR: number,
+  IF: number,
+  DST: number,
+  SUR: number
+): number {
+  return (LF * YR) + (IF * YR) + DST + SUR;
+}
+
+
+// ===============================
+// CATV STATION LICENSE (MOD)
+// FEEMOD = MOD + DST
+// ===============================
+private FEECATV_MOD(MOD: number, DST: number): number {
+  return MOD + DST;
+}
+
 
 
 
