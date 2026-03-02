@@ -68,15 +68,25 @@ interface VHF_UHF_Fee_Row {
   SUR100?: number;
 }
 interface TVROFEEROw {
-  reg?: number;
-  ff?: number;
-  cpf?: number;
-  lf?: number;
-  if?: number;
-  mod?: number;
-  dst?: number;
-  surLF50?: number;
-  surLF100?: number;
+  REG?: number;
+  FF?: number; 
+  CPF?: number;
+  LF?: number;
+  IF?: number;
+  MOD?: number;
+  DST?: number;
+  SURLF50?: number;
+  SURLF100?: number;
+}
+
+interface MOBILE_PHONE_PERMITS_FEE_ROW {
+  FF?: number;
+  PF?: number;
+  IF?: number;
+  MOD?: number;
+  DST?: number;
+  SUR50?: number;
+  SUR100?: number;
 }
 
 @Component({
@@ -178,11 +188,21 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
   }; 
 
   private readonly TVRO_FEES: Record<string, TVROFEEROw> = {
-    'TVRO': { reg: 6500, ff: 0, cpf: 0, lf: 2600, if: 0, mod: 180, dst: 30, surLF50: 1300, surLF100: 2600 },
-    'CATV station': { reg: 0, ff: 400, cpf: 1140, lf: 3600, if: 720, mod: 180, dst: 30, surLF50: 1800, surLF100: 3600 },
+    'TVRO': { REG: 6500, FF: 0, CPF: 0, LF: 2600, IF: 0, MOD: 180, DST: 30, SURLF50: 1300, SURLF100: 2600 },
+    'CATV station': { REG: 0, FF: 400, CPF: 1140, LF: 3600, IF: 720, MOD: 180, DST: 30, SURLF50: 1800, SURLF100: 3600 },
   };
 
-
+  private readonly MOBILE_PHONE_PERMITS_FEES: Record<string, MOBILE_PHONE_PERMITS_FEE_ROW> = {
+    'RCE dealer':            { FF: 180, PF: 1200, IF: 720, MOD: 120, DST: 30, SUR50: 600, SUR100: 1200 },
+    'RCE manufacturer':      { FF: 180, PF: 1760, IF: 720, MOD: 120, DST: 30, SUR50: 880, SUR100: 1760 },
+    'RCE service center':    { FF: 180, PF: 720, IF: 720, MOD: 120, DST: 30, SUR50: 360, SUR100: 720 },
+    'CPE Non-Mobile phones': { FF: 180, PF: 1200, IF: 720, MOD: 120, DST: 30, SUR50: 600, SUR100: 1200 },
+    'CPE Mobile phones':     { FF: 500, PF: 2500, IF: 150, MOD: 120, DST: 30, SUR50: 1250, SUR100: 2500 },
+    'MP dealer(main)':       { FF: 500, PF: 2500, IF: 1500, MOD: 120, DST: 30, SUR50: 1250, SUR100: 2500 },
+    'MP dealer(branch)':     { FF: 500, PF: 1500, IF: 1500, MOD: 120, DST: 30, SUR50: 750, SUR100: 1500 },
+    'RETAILER':              { FF: 500, PF: 1500, IF: 1500, MOD: 120, DST: 30, SUR50: 750, SUR100: 1500 },
+    'SERVICE CENTER':        { FF: 180, PF: 1200, IF: 720, MOD: 120, DST: 30, SUR50: 600, SUR100: 1200 },
+  };
   // =====================================================
   // TOTAL FIELDS 
   // =====================================================
@@ -823,83 +843,111 @@ private setupPublicCoastalFormulas(): void {
 
 
 
-// ===============================
-// TVRO REGISTRATION (COMM / NON-COMM)
-// FEETVROREG = REG + DST
-// ===============================
-private FEETVROREG(REG: number, DST: number): number {
-  return REG + DST;
+// …existing code…
+private setupTVROAndCATVFormulas(): void {
+
+  const typeCtrl  = this.pickCtrl(['tvroType','selectedTvro','licenseType']);
+  const yearsCtrl = this.pickCtrl(['tvroYears','years','numberOfYears']);
+  const unitsCtrl = this.pickCtrl(['tvroUnits','units','numberOfVessels']);
+
+  if (!typeCtrl) return;
+
+  combineLatest([
+    typeCtrl.valueChanges.pipe(startWith(typeCtrl.value)),
+    yearsCtrl?.valueChanges.pipe(startWith(yearsCtrl.value)) ?? [],
+    unitsCtrl?.valueChanges.pipe(startWith(unitsCtrl.value)) ?? [],
+  ])
+  .pipe(takeUntil(this.destroy$))
+  .subscribe(([type, years, units]) => {
+
+    const row = this.TVRO_FEES[String(type)?.trim()];
+    if (!row) return;
+
+    // convert every possibly‑undefined field to a number up front
+    const reg  = this.toNumber(row.REG);
+    const ff   = this.toNumber(row.FF);
+    const cpf  = this.toNumber(row.CPF);
+    const lf   = this.toNumber(row.LF);
+    const ifee = this.toNumber(row.IF);
+    const mod  = this.toNumber(row.MOD);
+    const dst  = this.toNumber(row.DST);
+    const vr   = this.toNumber(units);
+    const yr   = this.toNumber(years);
+    const sur  = this.toNumber(this.form.get('licSurcharges')?.value);
+
+    let result = 0;
+
+    switch (String(type)) {
+
+      // =====================================================
+      // TVRO Registration Certificate (Commercial)
+      // FEETVROREG = REG + DST
+      // =====================================================
+      case 'TVRO-REG-COMM':
+        result = reg + dst;
+        break;
+
+      // =====================================================
+      // TVRO Station License (Commercial)
+      // FEETVRORSL = (LF)(YR) + DST
+      // =====================================================
+      case 'TVRO-RSL-COMM':
+        result = (lf * yr) + dst;
+        break;
+
+      // =====================================================
+      // A. TVRO Registration Certificate (Non-Commercial)
+      // FEETVROREG = REG + DST
+      // =====================================================
+      case 'TVRO-REG-NONCOMM':
+        result = reg + dst;
+        break;
+
+      // =====================================================
+      // B.1 TVRO Station License (RENEWAL)
+      // FEETVRORSL = (LF)(YR) + DST + SUR
+      // =====================================================
+      case 'TVRO-REN':
+        result = (lf * yr) + dst + sur;
+        break;
+
+      // =====================================================
+      // B.2 TVRO Station License (MODIFICATION)
+      // FEEMOD = MOD + DST
+      // =====================================================
+      case 'TVRO-MOD':
+        result = mod + dst;
+        break;
+
+      // =====================================================
+      // C.1 CATV Station License (NEW)
+      // FEECATVRSL = FF + CPF + (LF)(VR) + (IF)(YR) + DST
+      // =====================================================
+      case 'CATV-NEW':
+        result = ff + cpf + (lf * vr) + (ifee * yr) + dst;
+        break;
+
+      // =====================================================
+      // C.2 CATV Station License (RENEWAL)
+      // FEECATVRSL = (LF)(YR) + (IF)(YR) + DST + SUR
+      // =====================================================
+      case 'CATV-REN':
+        result = (lf * yr) + (ifee * yr) + dst + sur;
+        break;
+
+      // =====================================================
+      // C.3 CATV Station License (MODIFICATION)
+      // FEEMOD = MOD + DST
+      // =====================================================
+      case 'CATV-MOD':
+        result = mod + dst;
+        break;
+    }
+
+    this.safePatch(this.form.get('licTvroCatv')!, result);
+    this.safePatch(this.form.get('dst')!, dst);
+  });
 }
-
-
-// ===============================
-// TVRO STATION LICENSE (NEW)
-// FEETVRORSL = (LF)(YR) + DST
-// ===============================
-private FEETVRORSL_NEW(LF: number, YR: number, DST: number): number {
-  return (LF * YR) + DST;
-}
-
-
-// ===============================
-// TVRO STATION LICENSE (REN)
-// FEETVRORSL = (LF)(YR) + DST + SUR
-// ===============================
-private FEETVRORSL_REN(LF: number, YR: number, DST: number, SUR: number): number {
-  return (LF * YR) + DST + SUR;
-}
-
-
-// ===============================
-// TVRO STATION LICENSE (MOD)
-// FEEMOD = MOD + DST
-// ===============================
-private FEETVRO_MOD(MOD: number, DST: number): number {
-  return MOD + DST;
-}
-
-
-// ===============================
-// CATV STATION LICENSE (NEW)
-// FEECATVRSL = FF + CPF + (LF)(VR) + (IF)(YR) + DST
-// ===============================
-private FEECATV_NEW(
-  FF: number,
-  CPF: number,
-  LF: number,
-  VR: number,
-  IF: number,
-  YR: number,
-  DST: number
-): number {
-  return FF + CPF + (LF * VR) + (IF * YR) + DST;
-}
-
-
-// ===============================
-// CATV STATION LICENSE (REN)
-// FEECATVRSL = (LF)(YR) + (IF)(YR) + DST + SUR
-// ===============================
-private FEECATV_REN(
-  LF: number,
-  YR: number,
-  IF: number,
-  DST: number,
-  SUR: number
-): number {
-  return (LF * YR) + (IF * YR) + DST + SUR;
-}
-
-
-// ===============================
-// CATV STATION LICENSE (MOD)
-// FEEMOD = MOD + DST
-// ===============================
-private FEECATV_MOD(MOD: number, DST: number): number {
-  return MOD + DST;
-}
-
-
 
 
   // =====================================================
