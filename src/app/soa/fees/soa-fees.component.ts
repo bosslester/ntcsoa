@@ -192,7 +192,7 @@ export class SoaFeesComponent implements OnInit, OnDestroy {
     'CATV station': { REG: 0, FF: 400, CPF: 1140, LF: 3600, IF: 720, MOD: 180, DST: 30, SURLF50: 1800, SURLF100: 3600 },
   };
 
-  private readonly MOBILE_PHONE_PERMITS_FEES: Record<string, MOBILE_PHONE_PERMITS_FEE_ROW> = {
+  private readonly RCE_FEES: Record<string, MOBILE_PHONE_PERMITS_FEE_ROW> = {
     'RCE dealer':            { FF: 180, PF: 1200, IF: 720, MOD: 120, DST: 30, SUR50: 600, SUR100: 1200 },
     'RCE manufacturer':      { FF: 180, PF: 1760, IF: 720, MOD: 120, DST: 30, SUR50: 880, SUR100: 1760 },
     'RCE service center':    { FF: 180, PF: 720, IF: 720, MOD: 120, DST: 30, SUR50: 360, SUR100: 720 },
@@ -946,6 +946,194 @@ private setupTVROAndCATVFormulas(): void {
 
     this.safePatch(this.form.get('licTvroCatv')!, result);
     this.safePatch(this.form.get('dst')!, dst);
+  });
+} 
+
+private setupRceCpeMpFormulas(): void {
+
+  const typeCtrl  = this.pickCtrl(['rceType','selectedType','licenseType']);
+  const yearsCtrl = this.pickCtrl(['years','numberOfYears']);
+
+  if (!typeCtrl) return;
+
+  combineLatest([
+    typeCtrl.valueChanges.pipe(startWith(typeCtrl.value)),
+    yearsCtrl?.valueChanges.pipe(startWith(yearsCtrl.value)) ?? [],
+  ])
+  .pipe(takeUntil(this.destroy$))
+  .subscribe(([type, years]) => {
+
+    const row = this.RCE_FEES[String(type)?.trim()];
+    if (!row) return;
+
+    const yr  = this.toNumber(years);
+    const sur = this.toNumber(this.form.get('licSurcharges')?.value);
+
+    let result = 0;
+
+    switch (String(type)) {
+
+      // =====================================================
+      // A.1 RCE Dealer Permit (NEW)
+      // FEEDP = FF + (PF)(YR) + (IF)(YR) + DST
+      // =====================================================
+      case 'A1-RCE-NEW':
+        result =
+          this.toNumber(row.FF) +
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST);
+        break;
+
+      // =====================================================
+      // A.2 RCE Dealer Permit (RENEWAL)
+      // FEEDP = (PF)(YR) + (IF)(YR) + DST + SUR
+      // =====================================================
+      case 'A2-RCE-REN':
+        result =
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST) +
+          sur;
+        break;
+
+      // =====================================================
+      // A.3 RCE Dealer Permit (MODIFICATION)
+      // FEEDP = MOD + DST
+      // =====================================================
+      case 'A3-RCE-MOD':
+        result =
+          this.toNumber(row.MOD) +
+          this.toNumber(row.DST);
+        break;
+
+      // =====================================================
+      // B.1 CPE Supplier Accreditation (NEW)
+      // =====================================================
+      case 'B1-CPE-NEW':
+        result =
+          this.toNumber(row.FF) +
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST);
+        break;
+
+      // =====================================================
+      // B.2 CPE Supplier Accreditation (RENEWAL)
+      // =====================================================
+      case 'B2-CPE-REN':
+        result =
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST) +
+          sur;
+        break;
+
+      // =====================================================
+      // B.3 CPE Supplier Accreditation (MOD)
+      // =====================================================
+      case 'B3-CPE-MOD':
+        result =
+          this.toNumber(row.MOD) +
+          this.toNumber(row.DST);
+        break;
+
+      // =====================================================
+      // C.1.1 MPDP (NEW)
+      // =====================================================
+      case 'C1-MPDP-NEW':
+        result =
+          this.toNumber(row.FF) +
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST);
+        break;
+
+      // =====================================================
+      // C.1.2 MPDP (RENEWAL)
+      // =====================================================
+      case 'C1-MPDP-REN':
+        result =
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST) +
+          sur;
+        break;
+
+      // =====================================================
+      // C.1.3 MPDP (MODIFICATION)
+      // =====================================================
+      case 'C1-MPDP-MOD':
+        result =
+          this.toNumber(row.MOD) +
+          this.toNumber(row.DST);
+        break;
+
+      // =====================================================
+      // C.2.1 MPRRP (NEW)
+      // =====================================================
+      case 'C2-MPRRP-NEW':
+        result =
+          this.toNumber(row.FF) +
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST);
+        break;
+
+      // =====================================================
+      // C.2.2 MPRRP (RENEWAL)
+      // =====================================================
+      case 'C2-MPRRP-REN':
+        result =
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST) +
+          sur;
+        break;
+
+      // =====================================================
+      // C.2.3 MPRRP (MODIFICATION)
+      // =====================================================
+      case 'C2-MPRRP-MOD':
+        result =
+          this.toNumber(row.MOD) +
+          this.toNumber(row.DST);
+        break;
+
+      // =====================================================
+      // C.3.1 MPSCP (NEW)
+      // =====================================================
+      case 'C3-MPSCP-NEW':
+        result =
+          this.toNumber(row.FF) +
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST);
+        break;
+
+      // =====================================================
+      // C.3.2 MPSCP (RENEWAL)
+      // =====================================================
+      case 'C3-MPSCP-REN':
+        result =
+          (this.toNumber(row.PF) * yr) +
+          (this.toNumber(row.IF) * yr) +
+          this.toNumber(row.DST) +
+          sur;
+        break;
+
+      // =====================================================
+      // C.3.3 MPSCP (MODIFICATION)
+      // =====================================================
+      case 'C3-MPSCP-MOD':
+        result =
+          this.toNumber(row.MOD) +
+          this.toNumber(row.DST);
+        break;
+    }
+
+    this.safePatch(this.form.get('licRceCpeMp')!, result);
+    this.safePatch(this.form.get('dst')!, this.toNumber(row.DST));
   });
 }
 
